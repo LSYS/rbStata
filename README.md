@@ -15,8 +15,8 @@ So what is one to do when colleagues or classmates send you a `.dta` from their 
 ### Alternative tools
 
 ### More about the problem
-* [[1]](https://www3.nd.edu/~rwilliam/stats/stataconversions.html) Stata data files: Reading and writing to and from different file formats
-* [[2]](https://www.stata.com/support/faqs/data-management/save-for-previous-version/) How can I save a Stata dataset so that it can be read by a previous version of Stata?
+* [[1]](https://www.stata.com/support/faqs/data-management/save-for-previous-version/) How can I save a Stata dataset so that it can be read by a previous version of Stata?
+* [[2]](https://www3.nd.edu/~rwilliam/stats/stataconversions.html) Stata data files: Reading and writing to and from different file formats
 
 
 ### About this utility
