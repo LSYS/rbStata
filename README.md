@@ -14,6 +14,8 @@ So what is one to do when colleagues or classmates send you a `.dta` from their 
 
 ### Alternative tools
 
+### More about the problem
+* [[1]](https://www3.nd.edu/~rwilliam/stats/stataconversions.html) Stata data files: Reading and writing to and from different file formats
 
-### About
+### About this utility
 This CLI uses 
