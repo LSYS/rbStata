@@ -1,11 +1,15 @@
 import click
 from typing import Sequence, Optional
 from pathlib import Path
-
+import re
 
 def normalize_filename(filename):
-    # return filename.lower()
-    return "fake"
+    """Normalize filenames by removing whitespaces and lower casing."""
+    # Remove extra whitespaces 
+    re_extra_whitespaces = re.compile(r"\s+")
+    filename = re_extra_whitespaces.sub(" ", filename).strip()    
+    filename = filename.lower()
+    return filename
 
 
 def normalize_dta_filename(filename: str) -> str:
@@ -112,28 +116,30 @@ def wbstata(
     if len(files) == 0:
         PROMPT = True
         files = click.prompt(
-            "Which Stata .dta file(s) to convert", type=File, default="*"
+            "Which .dta file(s) to convert", type=File, default="*"
         )
+        files = files.split(' ')
     else:
         PROMPT = False
 
     if version is None:
         version = click.prompt(
-            "Which Stata version to convert to?", type=int, default=13
+            "Which version to convert to?", type=int, default=13
         )
 
     if PROMPT and (suffix is None):
         suffix = click.prompt(
             "Convert and save file using suffix", type=str, default=""
         )
-    # if PROMPT and (prefix is None):
-    #     prefix = click.prompt("Convert and save file using prefix", type=str, default="")
     if PROMPT and (len(files) == 1):
         output = click.prompt(
             "Convert and save file as", type=str, default=f"{files[0]}-v{version}.dta"
         )
     else:
         output = None
+
+    files = [normalize_filename(f) for f in files]
+    files = [normalize_dta_filename(f) for f in files]
 
     if len(files) == 1:
         filename = files[0]
