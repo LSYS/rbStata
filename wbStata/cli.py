@@ -153,11 +153,9 @@ def wbstata(
                 output=output,
                 suffix=suffix,
             )
-            # print(output)
             convert_dta(filename, out, version)
     else:
         for file in files:
-            print(file)
             if overwrite:
                 convert_dta(file, file, version)
             else:
