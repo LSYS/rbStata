@@ -33,7 +33,7 @@ def convert_dta(input, output, version=13):
         17: None,
     }
     version = map_versions[version]
-    pd.read_stata(input).to_stata(output, version=None)
+    pd.read_stata(input).to_stata(output, version=version)
 
 
 def add_suffix(filename: str, suffix: str) -> str:
