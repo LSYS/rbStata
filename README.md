@@ -1,6 +1,8 @@
 # wbStata
 
-A quick and dirty CLI (command-line interface) to go way back with Stata data (`.dta`) files.
+Find your way back to older versions of Stata `.dta` files.
+
+`wbStata` is a quick and simple CLI (command-line interface) to go way back with Stata data (`.dta`) files.
 
 ### Statement of Need
 
