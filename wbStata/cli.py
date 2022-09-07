@@ -154,6 +154,8 @@ def wbstata(
         filename = files[0]
         if overwrite:
             convert_dta(filename, filename, version)
+            if verbose:
+                click.echo(f"Done overwriting {filename} in version {version}.")
         else:
             out = get_output_name(
                 filename,
@@ -163,10 +165,14 @@ def wbstata(
                 suffix=suffix,
             )
             convert_dta(filename, out, version)
+            if verbose:
+                click.echo(f"Done writing {filename} to {out} in version {version}.")
     else:
         for file in files:
             if overwrite:
                 convert_dta(file, file, version)
+                if verbose:
+                    click.echo(f"Done overwriting {file} in version {version}.")
             else:
                 out = get_output_name(
                     file,
@@ -176,8 +182,5 @@ def wbstata(
                     suffix=suffix,
                 )
                 convert_dta(file, out, version)
-
-    if verbose:
-        click.echo(
-            f"Converting {files} to Stata version {version} and saving to {output}"
-        )
+                if verbose:
+                    click.echo(f"Done writing {file} to {out} in version {version}.")

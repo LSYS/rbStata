@@ -3,7 +3,8 @@ from wbStata.cli import convert_dta
 from wbStata.cli import add_suffix
 from wbStata.cli import get_output_name
 from wbStata.cli import normalize_filename
-
+from click.testing import CliRunner
+from wbStata.cli import wbstata
 
 def test_normalize_dta_filename():
     expected = "census.dta"
@@ -77,3 +78,54 @@ def test_get_output_name():
     expected = add_suffix(file, suffix)
     result = get_output_name(file, version=version, overwrite=False)
     assert result == expected
+
+
+import click
+def test_wbstata():
+    runner = CliRunner()
+
+    # Check that prompt works with just file (prompt for version)
+    result = runner.invoke(wbstata, ['datasets/census.dta'])
+    assert result.exit_code==0
+    assert result.output=="Which version to convert to? [13]: \n"
+
+    # Check minimal command
+    dta = "datasets2/census.dta"
+    expected_output = f"Done writing {dta} to datasets2/census-v13.dta in version 13.\n"
+    result = runner.invoke(wbstata, [f'{dta}', '--version', '13', '--verbose'])
+    assert result.exit_code==0
+    assert result.output==expected_output
+
+    # Check multiple
+    dta1 = "datasets2/census.dta"
+    dta2 = "datasets2/auto.dta"
+    dta3 = "datasets2/lifeexp.dta"
+    result = runner.invoke(wbstata, [f'{dta1}', f'{dta2}', f'{dta3}', '--version', '13', '--verbose'])
+    assert result.exit_code==0
+    assert f"Done writing {dta1}" in result.output
+    assert f"Done writing {dta2}" in result.output
+    assert f"Done writing {dta3}" in result.output
+    assert f"in version 13." in result.output
+
+    # dta = "datasets2/census.dta"
+    # expected_output = f"Done overwriting {dta} as version 13."
+    # result = runner.invoke(wbstata, [f'{dta}', '--version', '13', '--verbose', '--overwrite'])
+    # assert result.output==expected_output
+
+    # Check that error is caught when file does not exist
+
+
+    # dta = "datasets2/census.dta"
+    # expected_output = f"Done overwriting {dta} as version 13."
+    # result = runner.invoke(wbstata, [f'{dta}', '--version', '13', '--verbose', '--overwrite'])
+    # assert result.output==expected_output
+    # Check that prompt works with just wbstata
+
+
+
+    # Check that verbose works
+
+    # # Check that error is caught when file does not exist
+    # result = runner.invoke(wbstata, ['datasets/census.dta'])
+    # assert result.exit_code==0
+    # assert result.output=="Which version to convert to? [13]: \n"
