@@ -30,10 +30,10 @@ def test_normalize_dta_filename():
 def test_normalize_filename():
     expected = "census.dta"
     result = normalize_filename("Census.dta")
-    assert expected==result
+    assert expected == result
 
     result = normalize_filename("Cens  us.dta")
-    assert expected==result
+    assert expected == result
 
 
 def test_convert_dta():

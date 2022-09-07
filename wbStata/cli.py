@@ -3,11 +3,12 @@ from typing import Sequence, Optional
 from pathlib import Path
 import re
 
+
 def normalize_filename(filename):
     """Normalize filenames by removing whitespaces and lower casing."""
-    # Remove extra whitespaces 
+    # Remove extra whitespaces
     re_extra_whitespaces = re.compile(r"\s+")
-    filename = re_extra_whitespaces.sub("", filename).strip()    
+    filename = re_extra_whitespaces.sub("", filename).strip()
     filename = filename.lower()
     return filename
 
@@ -80,13 +81,20 @@ File = str
 
 
 @click.command(context_settings=CONTEXT_SETTINGS)
-@click.argument("files", nargs=-1, required=False, type=File)
-@click.option("-v", "--version", help="Which version of Stata to convert to.", type=int)
+@click.argument("files", nargs=-1, required=False, type=File, metavar="<dta files>")
+@click.option(
+    "-v",
+    "--version",
+    help="Which version of Stata to convert to.",
+    type=int,
+    metavar="<int>",
+)
 @click.option(
     "-s",
     "--suffix",
     help="Suffix to be added to converted file.",
     type=str,
+    metavar="<text>",
 )
 @click.option(
     "-o",
@@ -94,6 +102,7 @@ File = str
     help="Name of converted .dta file (Single file conversion only). Supercedes [suffix].",
     type=str,
     default="[filename]-v[version].dta (e.g., auto-v13.dta)",
+    metavar="<text>",
 )
 @click.option(
     "-w",
@@ -112,20 +121,20 @@ def wbstata(
     overwrite: bool,
     verbose: bool,
 ) -> None:
-    """Find your way back to older versions of Stata .dta files."""
+    """Find your way back to older versions of dta files.
+
+    Convert newer Stata .dta files to older versions so that you can open them
+    in older Stata versions.
+    """
     if len(files) == 0:
         PROMPT = True
-        files = click.prompt(
-            "Which .dta file(s) to convert", type=File, default="*"
-        )
-        files = files.split(' ')
+        _files = click.prompt("Which .dta file(s) to convert", type=File, default="*")
+        files = _files.split(" ")
     else:
         PROMPT = False
 
     if version is None:
-        version = click.prompt(
-            "Which version to convert to?", type=int, default=13
-        )
+        version = click.prompt("Which version to convert to?", type=int, default=13)
 
     if PROMPT and (suffix is None):
         suffix = click.prompt(
