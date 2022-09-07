@@ -2,6 +2,7 @@ from wbStata.cli import normalize_dta_filename
 from wbStata.cli import convert_dta
 from wbStata.cli import add_suffix
 from wbStata.cli import get_output_name
+from wbStata.cli import normalize_filename
 
 
 def test_normalize_dta_filename():
@@ -24,6 +25,15 @@ def test_normalize_dta_filename():
     filename = "datasets/census.dta"
     result = normalize_dta_filename(filename)
     assert result == expected
+
+
+def test_normalize_filename():
+    expected = "census.dta"
+    result = normalize_filename("Census.dta")
+    assert expected==result
+
+    result = normalize_filename("Cens  us.dta")
+    assert expected==result
 
 
 def test_convert_dta():

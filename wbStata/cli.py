@@ -7,7 +7,7 @@ def normalize_filename(filename):
     """Normalize filenames by removing whitespaces and lower casing."""
     # Remove extra whitespaces 
     re_extra_whitespaces = re.compile(r"\s+")
-    filename = re_extra_whitespaces.sub(" ", filename).strip()    
+    filename = re_extra_whitespaces.sub("", filename).strip()    
     filename = filename.lower()
     return filename
 
