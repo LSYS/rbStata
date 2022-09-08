@@ -1,4 +1,5 @@
 import click
+from click import ClickException
 from typing import Sequence, Optional
 from pathlib import Path
 import re
@@ -23,6 +24,19 @@ def normalize_dta_filename(filename: str) -> str:
         return filename
 
 
+def is_dta_file(filename):
+    path = Path(filename)
+    if path.suffix == ".dta":
+        is_dta = True
+    else:
+        is_dta = False
+
+    if (path.is_file()) and (is_dta):
+        return True
+    else:
+        raise ClickException(f"{filename} is not a valid path to a dta file.")
+
+
 import pandas as pd
 
 
@@ -38,7 +52,7 @@ def convert_dta(input, output, version=13):
         17: None,
     }
     version = map_versions[version]
-    pd.read_stata(input).to_stata(output, version=version)
+    pd.read_stata(input).to_stata(output, version=version, write_index=False)
 
 
 def add_suffix(filename: str, suffix: str) -> str:
@@ -150,9 +164,12 @@ def wbstata(
     files = [normalize_filename(f) for f in files]
     files = [normalize_dta_filename(f) for f in files]
 
+    OVERWRITE_WARNING = "Warning: you are writing over original input dta file."
     if len(files) == 1:
         filename = files[0]
+        assert is_dta_file(filename)
         if overwrite:
+            click.echo(OVERWRITE_WARNING)
             convert_dta(filename, filename, version)
             if verbose:
                 click.echo(f"Done overwriting {filename} in version {version}.")
@@ -169,7 +186,15 @@ def wbstata(
                 click.echo(f"Done writing {filename} to {out} in version {version}.")
     else:
         for file in files:
+            try:
+                is_dta_file(file)
+            except ClickException:
+                click.echo(
+                    f"Error: {file} is not a valid path to a dta file.", err=True
+                )
+                continue
             if overwrite:
+                click.echo(OVERWRITE_WARNING)
                 convert_dta(file, file, version)
                 if verbose:
                     click.echo(f"Done overwriting {file} in version {version}.")
@@ -184,3 +209,6 @@ def wbstata(
                 convert_dta(file, out, version)
                 if verbose:
                     click.echo(f"Done writing {file} to {out} in version {version}.")
+
+    if verbose:
+        click.echo("Conversions complete.")
