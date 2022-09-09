@@ -17,10 +17,25 @@ So what is one to do when you try to open a `dta` file in Stata and get a rude `
 
 
 ## Quick usage
-<pre>
-    $ wbstata -h</pre>
-```console
 
+Show help documentation: `wbstata -h`
+```console
+$ wbstata -h
+Usage: wbstata [OPTIONS] <dta files>
+
+  Find your way back to older versions of dta files.
+
+  Convert newer Stata .dta files to older versions so that you can open them in older
+  Stata versions.
+
+Options:
+  -v, --version <int>  Which version of Stata to convert to.
+  -s, --suffix <text>  Suffix to be added to converted file.
+  -o, --output <text>  Name of converted .dta file (Single file conversion only).
+                       Supercedes [suffix].
+  -w, --overwrite      Over[w]rite original input .dta files.
+  -ve, --verbose       Print messages.
+  -h, --help           Show this message and exit.
 ```
 
 ## Alternative tools
