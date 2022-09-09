@@ -9,7 +9,8 @@ Find your way back to older versions of Stata `.dta` files.
 Stata `.dta` data files are not forward compatible. 
 This means you cannot use older versions (e.g., `Stata 13`) to read a `.dta` file exported from newer versions (e.g., `Stata 17`).
 
-So what is one to do when colleagues or classmates send you a `.dta` from their newer version of Stata and you end up with the following error because you have no access to newer Stata versions?
+So what is one to do when you try to open a `dta` file and encounter a `dta too modern r(601)` error in Stata:
+
 
 ### Quick usage
 
