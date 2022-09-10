@@ -13,7 +13,7 @@ So what is one to do when you try to open a `dta` file in Stata and get a rude `
   <p align="center"><img width="100%" src="./assets/gfy-error.png"></p>
 </details>
 
-`wbStata` is a quick and dead simple CLI (command-line interface) to go way back with Stata data (`.dta`) files. You do not need access to newer `Stata` versions.
+`wbStata` is a quick and dead simple CLI (command-line interface) to go way back with Stata data (`.dta`) files. You *do not need access to* newer `Stata` versions.
 
 
 ## Quick usage
