@@ -4,7 +4,7 @@ from typing import Sequence, Optional, Union
 from pathlib import Path
 import re
 import pandas as pd
-
+from glob import glob
 
 def normalize_filename(filename: str) -> str:
     """Normalize filenames by removing whitespaces and lower casing."""
@@ -151,7 +151,10 @@ def wbstata(
         _files = click.prompt(
             "Which .dta file(s) to convert", type=File, default="*"
         )
-        files = _files.split(" ")
+        if _files=="*":
+            files = glob("*.dta")
+        else:
+            files = _files.split(" ")
     else:
         PROMPT = False
 
@@ -162,13 +165,14 @@ def wbstata(
 
     if PROMPT and (suffix is None):
         suffix = click.prompt(
-            "Convert and save file using suffix", type=str, default=""
+            "Convert and save file using suffix", type=str, default=f"-v{version}"
         )
     if PROMPT and (len(files) == 1):
+        filename_no_extension = files[0].split(".dta")[0]
         output = click.prompt(
             "Convert and save file as",
             type=str,
-            default=f"{files[0]}-v{version}.dta",
+            default=f"{filename_no_extension}-v{version}.dta",
         )
     else:
         output = None
