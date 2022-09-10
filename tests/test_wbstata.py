@@ -43,7 +43,9 @@ def test_normalize_filename():
 
 def test_convert_dta():
     for version in range(10, 17 + 1):
-        convert_dta("datasets/census.dta", "temp/test-output.dta", version=version)
+        convert_dta(
+            "datasets/census.dta", "temp/test-output.dta", version=version
+        )
 
 
 def test_add_suffix():
@@ -111,7 +113,9 @@ def test_wbstata():
 
     # Check minimal command
     dta = "datasets2/census.dta"
-    expected_output = f"Done writing {dta} to datasets2/census-v13.dta in version 13.\n"
+    expected_output = (
+        f"Done writing {dta} to datasets2/census-v13.dta in version 13.\n"
+    )
     result = runner.invoke(wbstata, [f"{dta}", "--version", "13", "--verbose"])
     assert result.exit_code == 0
     assert expected_output in result.output
@@ -122,7 +126,8 @@ def test_wbstata():
     dta2 = "datasets2/auto.dta"
     dta3 = "datasets2/lifeexp.dta"
     result = runner.invoke(
-        wbstata, [f"{dta1}", f"{dta2}", f"{dta3}", "--version", "13", "--verbose"]
+        wbstata,
+        [f"{dta1}", f"{dta2}", f"{dta3}", "--version", "13", "--verbose"],
     )
     assert result.exit_code == 0
     assert f"Done writing {dta1}" in result.output
@@ -133,10 +138,13 @@ def test_wbstata():
 
     # Check that error is caught when file does not exist
     invalid_file = "dummy.dta"
-    result = runner.invoke(wbstata, [f"{invalid_file}", "--version", "13", "--verbose"])
+    result = runner.invoke(
+        wbstata, [f"{invalid_file}", "--version", "13", "--verbose"]
+    )
     assert result.exit_code != 0
     assert (
-        result.output == f"Error: {invalid_file} is not a valid path to a dta file.\n"
+        result.output
+        == f"Error: {invalid_file} is not a valid path to a dta file.\n"
     )
 
     # Check that error is caught one if the files does not exist
@@ -144,13 +152,18 @@ def test_wbstata():
         wbstata, [f"{dta1}", f"{invalid_file}", "--version", "13", "--verbose"]
     )
     assert result.exit_code == 0
-    assert f"Error: {invalid_file} is not a valid path to a dta file." in result.output
+    assert (
+        f"Error: {invalid_file} is not a valid path to a dta file."
+        in result.output
+    )
     assert COMPLETION_MSG in result.output
 
     # Check that overwrite works
     # Warning should be present without verbose option
     OVERWRITE_WARNING = "Warning: you are writing over original input dta file."
-    result = runner.invoke(wbstata, [f"{dta1}", "--version", "17", "--overwrite"])
+    result = runner.invoke(
+        wbstata, [f"{dta1}", "--version", "17", "--overwrite"]
+    )
     assert result.exit_code == 0
     assert OVERWRITE_WARNING in result.output
 
@@ -166,7 +179,8 @@ def test_wbstata():
     # Check that overwrite works for multiple files work
     OVERWRITE_WARNING = "Warning: you are writing over original input dta file."
     result = runner.invoke(
-        wbstata, [f"{dta1}", f"{dta2}" "--version", "17", "--overwrite", "--verbose"]
+        wbstata,
+        [f"{dta1}", f"{dta2}" "--version", "17", "--overwrite", "--verbose"],
     )
     assert result.exit_code == 0
     assert OVERWRITE_WARNING in result.output

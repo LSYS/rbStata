@@ -11,14 +11,15 @@ test: ## Run tests with pytest and coverage
 
 .PHONY: lint
 MYPY_OPTS := --ignore-missing-imports
+BLACK_OPTS := --line-length 80
 lint: ## Check with mypy, pyflakes, black
 	@echo "+ $@"
-	black setup.py 
-	black wbStata/*.py 
-	black tests/*.py 
+# 	black setup.py $(BLACK_OPTS)
+# 	black wbStata/*.py $(BLACK_OPTS)
+# 	black tests/*.py $(BLACK_OPTS)
 	mypy wbStata/*.py $(MYPY_OPTS)
-	python -m pyflakes wbStata/*.py
-	python -m pyflakes tests/*.py
+# 	python -m pyflakes wbStata/*.py
+# 	python -m pyflakes tests/*.py
 
 .PHONY: clean-test
 clean-test: ## Remove testing and coverage artifacts

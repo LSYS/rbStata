@@ -1,11 +1,12 @@
 import click
 from click import ClickException
-from typing import Sequence, Optional
+from typing import Sequence, Optional, Union
 from pathlib import Path
 import re
+import pandas as pd
 
 
-def normalize_filename(filename):
+def normalize_filename(filename: str) -> str:
     """Normalize filenames by removing whitespaces and lower casing."""
     # Remove extra whitespaces
     re_extra_whitespaces = re.compile(r"\s+")
@@ -24,7 +25,8 @@ def normalize_dta_filename(filename: str) -> str:
         return filename
 
 
-def is_dta_file(filename):
+def is_dta_file(filename: str) -> bool:
+    """Check if filename is a valid path to a dta file."""
     path = Path(filename)
     if path.suffix == ".dta":
         is_dta = True
@@ -37,10 +39,10 @@ def is_dta_file(filename):
         raise ClickException(f"{filename} is not a valid path to a dta file.")
 
 
-import pandas as pd
-
-
-def convert_dta(input, output, version=13):
+def convert_dta(
+    input: str, output: str, version
+) -> None:
+    """Convert dta file."""
     map_versions = {
         10: 114,
         11: 114,
@@ -95,7 +97,9 @@ File = str
 
 
 @click.command(context_settings=CONTEXT_SETTINGS)
-@click.argument("files", nargs=-1, required=False, type=File, metavar="<dta files>")
+@click.argument(
+    "files", nargs=-1, required=False, type=File, metavar="<dta files>"
+)
 @click.option(
     "-v",
     "--version",
@@ -125,7 +129,9 @@ File = str
     is_flag=True,
     flag_value=True,
 )
-@click.option("-ve", "--verbose", help="Print messages.", is_flag=True, flag_value=True)
+@click.option(
+    "-ve", "--verbose", help="Print messages.", is_flag=True, flag_value=True
+)
 def wbstata(
     files: Sequence[str],
     version: Optional[int],
@@ -142,13 +148,17 @@ def wbstata(
     """
     if len(files) == 0:
         PROMPT = True
-        _files = click.prompt("Which .dta file(s) to convert", type=File, default="*")
+        _files = click.prompt(
+            "Which .dta file(s) to convert", type=File, default="*"
+        )
         files = _files.split(" ")
     else:
         PROMPT = False
 
     if version is None:
-        version = click.prompt("Which version to convert to?", type=int, default=13)
+        version = click.prompt(
+            "Which version to convert to?", type=int, default=13
+        )
 
     if PROMPT and (suffix is None):
         suffix = click.prompt(
@@ -156,7 +166,9 @@ def wbstata(
         )
     if PROMPT and (len(files) == 1):
         output = click.prompt(
-            "Convert and save file as", type=str, default=f"{files[0]}-v{version}.dta"
+            "Convert and save file as",
+            type=str,
+            default=f"{files[0]}-v{version}.dta",
         )
     else:
         output = None
@@ -183,14 +195,17 @@ def wbstata(
             )
             convert_dta(filename, out, version)
             if verbose:
-                click.echo(f"Done writing {filename} to {out} in version {version}.")
+                click.echo(
+                    f"Done writing {filename} to {out} in version {version}."
+                )
     else:
         for file in files:
             try:
                 is_dta_file(file)
             except ClickException:
                 click.echo(
-                    f"Error: {file} is not a valid path to a dta file.", err=True
+                    f"Error: {file} is not a valid path to a dta file.",
+                    err=True,
                 )
                 continue
             if overwrite:
@@ -208,7 +223,9 @@ def wbstata(
                 )
                 convert_dta(file, out, version)
                 if verbose:
-                    click.echo(f"Done writing {file} to {out} in version {version}.")
+                    click.echo(
+                        f"Done writing {file} to {out} in version {version}."
+                    )
 
     if verbose:
         click.echo("Conversions complete.")
