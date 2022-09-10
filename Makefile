@@ -2,7 +2,7 @@
 
 .PHONY: test
 test: ## Run tests with pytest and coverage
-test: 
+	@echo "+ $@"
 	-mkdir temp
 	coverage erase
 	coverage run -m pytest -v
@@ -10,13 +10,23 @@ test:
 	@rm -rf temp
 
 .PHONY: lint
+MYPY_OPTS := --ignore-missing-imports
 lint: ## Check with mypy, pyflakes, black
-lint: 
+	@echo "+ $@"
+	black setup.py 
 	black wbStata/*.py 
 	black tests/*.py 
-	mypy wbStata/*.py --ignore-missing-imports
+	mypy wbStata/*.py $(MYPY_OPTS)
 	python -m pyflakes wbStata/*.py
 	python -m pyflakes tests/*.py
+
+.PHONY: clean-test
+clean-test: ## Remove testing and coverage artifacts
+	@echo "+ $@"
+	@rm -rf .pytest_cache/
+	@rm -rf htmlcov/
+	@rm -rf .coverage
+	@rm -rf coverage.xml
 
 .PHONY: clean-pyc
 clean-pyc: ## Remove Python file artifacts
@@ -27,6 +37,7 @@ clean-pyc: ## Remove Python file artifacts
 
 .PHONY: clean-mypy
 clean-mypy: ## Remove mypy artifacts	
+	@echo "+ $@"
 	@rm -rf .mypy_cache
 
 .PHONY: clean-build
@@ -35,33 +46,36 @@ clean-build: ## Remove build artifacts
 	@rm -fr build/
 	@rm -fr dist/
 	@rm -fr *.egg-info
+	@rm -fr *.egg
+
+.PHONY: clean-ipynb
+clean-ipynb: ## Remove ipynb artifacts
+	@echo "+ $@"
+	@rm -fr *.ipynb_checkpoints
 
 .PHONY: clean
 clean: ## Remove artifacts
-clean: clean-mypy clean-pyc clean-build
+clean: clean-test clean-ipynb clean-mypy clean-pyc clean-build
 
-.PHONY: setup
-setup: ## Set up env and requirements
-setup:
-	$(CONDA_ACTIVATE) wbStata
-# 	conda activate 
-
-
-.PHONY: install
-install: ## Install for internal testing
-install:
-	@rm -rf dist/ runpynb.egg-info/
+.PHONY: build
+build: clean ## Prepare packaging for PyPi
+	@echo "+ $@"
+	@rm -rf dist/ wbStata.egg-info/
 	@python setup.py sdist
-	tar -xf dist/runpynb-0.1.*.tar.gz
-	python ./assets/checkDistCR.py
 	twine check dist/*
 
+.PHONY: setup
+setup: ## Set up dependencies
+	@echo "+ $@"
+	@pip install -r tests/requirements_dev.txt
+	@pip install -r requirements.txt
+
 .PHONY: devtest
-devtest:	
+devtest: ## Install dev and test in editable mode
+	@echo "+ $@"
 	pip install -e .
 	wbstata
 
 .PHONY: help
 help: ## Show this help message and exit
-help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-16s\033[0m %s\n", $$1, $$2}'

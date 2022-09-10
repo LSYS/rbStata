@@ -1,0 +1,6 @@
+pytest
+mypy
+pyflakes
+twine
+coverage
+black
