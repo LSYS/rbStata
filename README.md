@@ -41,7 +41,7 @@ So what is one to do when you try to open a `dta` file in Stata and get a rude `
 ## About this utility
 `wbStata` is a CLI utility to easily convert between (or, go way back to) versions of Stata's `.dta`, which are not forward compatible. 
 
-Show help documentation: `wbstata -h`
+Show CLI help reference: `wbstata -h`
 ```console
 $ wbstata -h
 Usage: wbstata [OPTIONS] <dta files>
