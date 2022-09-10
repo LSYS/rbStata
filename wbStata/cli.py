@@ -1,10 +1,11 @@
 import click
 from click import ClickException
-from typing import Sequence, Optional, Union
+from typing import Sequence, Optional
 from pathlib import Path
 import re
 import pandas as pd
 from glob import glob
+
 
 def normalize_filename(filename: str) -> str:
     """Normalize filenames by removing whitespaces and lower casing."""
@@ -39,9 +40,7 @@ def is_dta_file(filename: str) -> bool:
         raise ClickException(f"{filename} is not a valid path to a dta file.")
 
 
-def convert_dta(
-    input: str, output: str, version
-) -> None:
+def convert_dta(input: str, output: str, version) -> None:
     """Convert dta file."""
     map_versions = {
         10: 114,
@@ -89,16 +88,12 @@ def get_output_name(
 CONTEXT_SETTINGS = {
     "help_option_names": ("-h", "--help"),
     "max_content_width": 90,
-    # 'token_normalize_func': lambda filename: normalize_filename(filename)
 }
-
-# File = click.File(mode="r", encoding=None, errors="strict", lazy=True)
-File = str
 
 
 @click.command(context_settings=CONTEXT_SETTINGS)
 @click.argument(
-    "files", nargs=-1, required=False, type=File, metavar="<dta files>"
+    "files", nargs=-1, required=False, type=str, metavar="<dta files>"
 )
 @click.option(
     "-v",
@@ -123,6 +118,13 @@ File = str
     metavar="<text>",
 )
 @click.option(
+    "-r",
+    "--recursive",
+    help="Convert all .dta files in directory and subdirectories.",
+    is_flag=True,
+    flag_value=True,
+)
+@click.option(
     "-w",
     "--overwrite",
     help="Over[w]rite original input .dta files.",
@@ -136,8 +138,8 @@ def wbstata(
     files: Sequence[str],
     version: Optional[int],
     suffix: Optional[str],
-    # prefix: Optional[str],
     output: Optional[str],
+    recursive: bool,
     overwrite: bool,
     verbose: bool,
 ) -> None:
@@ -148,15 +150,25 @@ def wbstata(
     """
     if len(files) == 0:
         PROMPT = True
-        _files = click.prompt(
-            "Which .dta file(s) to convert", type=File, default="*"
-        )
-        if _files=="*":
-            files = glob("*.dta")
-        else:
-            files = _files.split(" ")
+        _files = click.prompt(".dta file(s)", type=str, default="*")
     else:
         PROMPT = False
+
+    if PROMPT and (_files == "*"):
+        recursive = click.prompt(
+            "Include .dta files in subdirectories (y/n)",
+            type=click.BOOL,
+            default="n",
+        )
+
+    if PROMPT:
+        if _files == "*":
+            if recursive:
+                files = glob("**/*.dta", recursive=recursive)
+            else:
+                files = glob("*.dta")
+        else:
+            files = _files.split(" ")
 
     if version is None:
         version = click.prompt(
@@ -165,7 +177,9 @@ def wbstata(
 
     if PROMPT and (suffix is None):
         suffix = click.prompt(
-            "Convert and save file using suffix", type=str, default=f"-v{version}"
+            "Convert and save file using suffix",
+            type=str,
+            default=f"-v{version}",
         )
     if PROMPT and (len(files) == 1):
         filename_no_extension = files[0].split(".dta")[0]
@@ -176,6 +190,12 @@ def wbstata(
         )
     else:
         output = None
+    # click.echo(files)
+    # import sys
+    # if files==["*"]:
+    #     files = [file for file in files if ".dta" in file]
+    # click.echo(files)
+    # sys.exit(1)
 
     files = [normalize_filename(f) for f in files]
     files = [normalize_dta_filename(f) for f in files]
