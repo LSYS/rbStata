@@ -206,16 +206,13 @@ def wbstata(
         output = None
 
     if verbose:
-        click.echo(f"dta files to be converted: {files}")
-    # click.echo(files)
-    # import sys
-    # if files==["*"]:
-    #     files = [file for file in files if ".dta" in file]
-    # click.echo(files)
-    # sys.exit(1)
+        click.echo(f"dta files entered: {files}")
 
     files = [normalize_filename(f) for f in files]
     files = [normalize_dta_filename(f) for f in files]
+
+    if verbose:
+        click.echo(f"Valid dta files to be converted: {files}")
 
     OVERWRITE_WARNING = "Warning: you are writing over original input dta file."
     if len(files) == 1:
@@ -269,4 +266,7 @@ def wbstata(
                     )
 
     if verbose:
-        click.echo("Conversions complete.")
+        if len(files)>0:
+            click.echo("Conversions complete.")
+        else:
+            click.echo("Nothing to convert.")

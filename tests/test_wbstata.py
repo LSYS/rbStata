@@ -143,8 +143,7 @@ def test_wbstata():
     )
     assert result.exit_code != 0
     assert (
-        result.output
-        == f"Error: {invalid_file} is not a valid path to a dta file.\n"
+        f"Error: {invalid_file} is not a valid path to a dta file." in result.output
     )
 
     # Check that error is caught one if the files does not exist
@@ -191,3 +190,21 @@ def test_wbstata():
         wbstata, [f"{dta1}", "--version", "13", "--suffix", "-suffix"]
     )
     assert result.exit_code == 0
+
+    # Check that messages are correct if no valid dta files are found
+    result = runner.invoke(
+        wbstata, ["--all", "--version", "13", "--verbose"]
+    )
+    assert result.exit_code == 0
+    assert "dta files entered:" in result.output
+    assert "Valid dta files to be converted:" in result.output
+    assert "Nothing to convert." in result.output
+
+    # Check that messages are correct with recursion
+    result = runner.invoke(
+        wbstata, ["--all", "--version", "13", "--verbose", "--recursive"]
+    )
+    assert result.exit_code == 0
+    assert "dta files entered:" in result.output
+    assert "Valid dta files to be converted:" in result.output
+    assert "Conversions complete." in result.output    
