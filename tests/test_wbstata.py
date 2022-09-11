@@ -104,7 +104,7 @@ def test_glob_dta_files():
 def test_convert_dta():
     for version in range(10, 17 + 1):
         convert_dta(
-            "datasets/census.dta", "temp/test-output.dta", version=version
+            "datasets/census.dta", "datasets/test-output.dta", version=version
         )
 
 
