@@ -49,24 +49,28 @@ So what is one to do when you try to open a `dta` file in Stata and get a rude `
 ## About this utility
 `wbStata` is a CLI utility to easily convert between (or, go way back to) versions of Stata's `.dta`, which are not forward compatible. 
 
-Show CLI help reference: `wbstata -h`
-```console
-$ wbstata -h
-Usage: wbstata [OPTIONS] <dta files>
+<details><summary>Show CLI help reference</summary>
+  
+  ```console
+  $ wbstata -h
+  Usage: wbstata [OPTIONS] <dta files>
 
-  Find your way back to older versions of dta files.
+    Find your way back to older versions of dta files.
 
-  Convert newer Stata .dta files to older versions so that you can open them in older
-  Stata versions.
+    Convert newer Stata .dta files to older versions so that you can open them in older
+    Stata versions.
 
-Options:
-  -v, --version <int>  Which version of Stata to convert to.
-  -s, --suffix <text>  Suffix to be added to converted file.
-  -o, --output <text>  Name of converted .dta file (Single file conversion only).
-                       Supercedes [suffix].
-  -w, --overwrite      Over[w]rite original input .dta files.
-  -ve, --verbose       Print messages.
-  -h, --help           Show this message and exit.
-```
-
+  Options:
+    -a, --all            Convert all dta files in path.
+    -v, --version <int>  Which version of Stata to convert to.
+    -s, --suffix <text>  Suffix to be added to converted file.
+    -o, --output <text>  Name of converted .dta file (Single file conversion only).
+                         Supercedes [suffix].
+    -r, --recursive      Convert all .dta files in directory and subdirectories.
+    -w, --overwrite      Over[w]rite original input .dta files.
+    -ve, --verbose       Print messages.
+    -h, --help           Show this message and exit.
+  ```
+</details>
+  
 This utility wraps around [`click`](https://click.palletsprojects.com/) and [`pandas`](https://github.com/pandas-dev/pandas)'s [`DataFrame.to_Stata`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_stata.html) utility.
