@@ -41,6 +41,7 @@ def test_normalize_filename():
     result = normalize_filename("Cens  us.dta")
     assert expected == result
 
+
 def test_add_suffix():
     expected = "census-v13.dta"
     result = add_suffix("census.dta", suffix="-v13")
@@ -93,12 +94,13 @@ def test_is_dta_file():
         is_dta_file(invalid_file)
     assert f"{invalid_file} is not a valid path to a dta file." in str(excinfo)
 
+
 def test_glob_dta_files():
     files = glob_dta_files(recursive=False)
-    assert len(files)==0
+    assert len(files) == 0
 
     files = glob_dta_files(recursive=True)
-    assert len(files)>0
+    assert len(files) > 0
 
 
 def test_convert_dta():
@@ -150,7 +152,8 @@ def test_wbstata():
     )
     assert result.exit_code != 0
     assert (
-        f"Error: {invalid_file} is not a valid path to a dta file." in result.output
+        f"Error: {invalid_file} is not a valid path to a dta file."
+        in result.output
     )
 
     # Check that error is caught one if the files does not exist
@@ -199,9 +202,7 @@ def test_wbstata():
     assert result.exit_code == 0
 
     # Check that messages are correct if no valid dta files are found
-    result = runner.invoke(
-        wbstata, ["--all", "--version", "13", "--verbose"]
-    )
+    result = runner.invoke(wbstata, ["--all", "--version", "13", "--verbose"])
     assert result.exit_code == 0
     assert "dta files entered:" in result.output
     assert "Valid dta files to be converted:" in result.output
@@ -214,4 +215,4 @@ def test_wbstata():
     assert result.exit_code == 0
     assert "dta files entered:" in result.output
     assert "Valid dta files to be converted:" in result.output
-    assert "Conversions complete." in result.output    
+    assert "Conversions complete." in result.output
