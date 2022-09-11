@@ -1,0 +1,85 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main", "patch" ]
+  pull_request:
+    branches: [ "main" ]
+    
+jobs:
+  build:
+    name: Lint and test coverage
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install black pyflakes mypy
+      - name: Check black formatter and pyflakes
+        run: |
+          black setup.py --line-length 80
+          black wbStata/*.py --line-length 80
+          black tests/*.py --line-length 80
+          mypy wbStata/*.py --ignore-missing-imports
+          python -m pyflakes wbStata/*.py
+          python -m pyflakes tests/*.py
+          python -m pyflakes setup.py
+      - name: Generate coverage report
+        run: |
+          pip install pytest coverage
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi        
+          coverage run -m pytest
+      - name: Upload Coverage to Codecov
+        uses: codecov/codecov-action@v2            
+        
+  build_macOS:
+    name: Build macOS wheel
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.6','3.7', '3.8', '3.9', '3.10']
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install pytest
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Test with pytest
+      run: |
+        pytest        
+        
+  build_windows:
+    name: Build windows wheel
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.7', '3.8', '3.9', '3.10']
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install pytest
+        pip install -r requirements.txt
+    - name: Test with pytest
+      run: |
+        pytest        
