@@ -115,10 +115,18 @@ def test_wbstata():
 
     COMPLETION_MSG = "Conversions complete."
 
+    # Check that prompt works
+    result = runner.invoke(wbstata)
+    assert result.exit_code == 0
+    assert "Welcome to the wbStata quickstart command-line utility." in result.output
+    assert "You will be prompted for relevant settings." in result.output
+    assert "Please enter values under the following settings." in result.output
+    assert "(just press Enter to accept the default value in brackets)" in result.output
+
     # Check that prompt works with just file (prompt for version)
     result = runner.invoke(wbstata, ["datasets/census.dta"])
     assert result.exit_code == 0
-    assert "Which version to convert to? [13]:" in result.output
+    assert "> Target version" in result.output
 
     # Check minimal command
     dta = "datasets2/census.dta"
