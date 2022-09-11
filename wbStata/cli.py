@@ -84,6 +84,13 @@ def get_output_name(
                 filename = add_suffix(file, f"-v{version}")
                 return filename
 
+def glob_dta_files(recursive: bool) -> list:
+    """Get all files with .dta extension"""
+    if recursive:
+        files = glob("**/*.dta", recursive=recursive)
+    else:
+        files = glob("*.dta")
+    return files
 
 CONTEXT_SETTINGS = {
     "help_option_names": ("-h", "--help"),
@@ -172,17 +179,12 @@ def wbstata(
     # Consolidate files to convert
     if PROMPT:
         if _files == "*":
-            if recursive:
-                files = glob("**/*.dta", recursive=recursive)
-            else:
-                files = glob("*.dta")
+            files = glob_dta_files(recursive=recursive)
         else:
             files = _files.split(" ")
     elif all:
-        if recursive:
-            files = glob("**/*.dta", recursive=recursive)     
-        else:
-            files = glob("*.dta")   
+        files = glob_dta_files(recursive=recursive)
+
 
     if version is None:
         version = click.prompt(

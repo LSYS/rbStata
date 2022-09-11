@@ -4,6 +4,7 @@ from wbStata.cli import add_suffix
 from wbStata.cli import get_output_name
 from wbStata.cli import normalize_filename
 from wbStata.cli import is_dta_file
+from wbStata.cli import glob_dta_files
 from click.testing import CliRunner
 from wbStata.cli import wbstata
 import pytest
@@ -39,14 +40,6 @@ def test_normalize_filename():
 
     result = normalize_filename("Cens  us.dta")
     assert expected == result
-
-
-def test_convert_dta():
-    for version in range(10, 17 + 1):
-        convert_dta(
-            "datasets/census.dta", "temp/test-output.dta", version=version
-        )
-
 
 def test_add_suffix():
     expected = "census-v13.dta"
@@ -99,6 +92,20 @@ def test_is_dta_file():
     with pytest.raises(ClickException) as excinfo:
         is_dta_file(invalid_file)
     assert f"{invalid_file} is not a valid path to a dta file." in str(excinfo)
+
+def test_glob_dta_files():
+    files = glob_dta_files(recursive=False)
+    assert len(files)==0
+
+    files = glob_dta_files(recursive=True)
+    assert len(files)>0
+
+
+def test_convert_dta():
+    for version in range(10, 17 + 1):
+        convert_dta(
+            "datasets/census.dta", "temp/test-output.dta", version=version
+        )
 
 
 def test_wbstata():
