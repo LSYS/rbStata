@@ -19,8 +19,16 @@ So what is one to do when you try to open a `dta` file in Stata and get a rude `
 ## Quick usage
 
 * **Simple and Single-line command-line usage:**
-  Convert the `auto.dta` file
-  <pre>$ wbstata auto.dta --version 13 --verbose</pre>
+  * Convert the `auto.dta` file so that you can open it in Stata 13
+    <pre>$ wbstata auto.dta --version 13 --verbose</pre>
+  
+  
+  * Convert all `dta` files in the path so that you can open it in Stata 13
+    <pre>$ wbstata --all --version 13 --verbose</pre>
+  
+  
+  
+  
 
 * **Let `wbStata` prompt you for relevant settings:** <br>
   (press enter to accept default settings in brackets)
