@@ -21,6 +21,14 @@ lint: ## Check with mypy, pyflakes, black
 	python -m pyflakes wbStata/*.py
 	python -m pyflakes tests/*.py
 
+.PHONY: clean-dta
+clean-dta: ## Remove unoriginal dta artifacts (e.g. auto-v13.dta)
+	@echo "+ $@"
+	@find . -type f -name '*v*.dta' -exec rm -f {} +
+	@find . -type f -name '*v.dta' -exec rm -f {} +
+	@find . -type f -name '*-*.dta' -exec rm -f {} +
+	@find . -type f -name '*test*.dta' -exec rm -f {} +
+
 .PHONY: clean-test
 clean-test: ## Remove testing and coverage artifacts
 	@echo "+ $@"
@@ -56,7 +64,7 @@ clean-ipynb: ## Remove ipynb artifacts
 
 .PHONY: clean
 clean: ## Remove artifacts
-clean: clean-test clean-ipynb clean-mypy clean-pyc clean-build
+clean: clean-test clean-ipynb clean-mypy clean-pyc clean-build clean-dta
 
 .PHONY: build
 build: clean ## Prepare packaging for PyPi

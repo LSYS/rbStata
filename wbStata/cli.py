@@ -96,6 +96,13 @@ CONTEXT_SETTINGS = {
     "files", nargs=-1, required=False, type=str, metavar="<dta files>"
 )
 @click.option(
+    "-a",
+    "--all",
+    help="Convert all dta files in path.",
+    is_flag=True,
+    flag_value=True,
+)
+@click.option(
     "-v",
     "--version",
     help="Which version of Stata to convert to.",
@@ -139,6 +146,7 @@ def wbstata(
     version: Optional[int],
     suffix: Optional[str],
     output: Optional[str],
+    all: bool,
     recursive: bool,
     overwrite: bool,
     verbose: bool,
@@ -148,7 +156,7 @@ def wbstata(
     Convert newer Stata .dta files to older versions so that you can open them
     in older Stata versions.
     """
-    if len(files) == 0:
+    if (len(files) == 0) and (not all):
         PROMPT = True
         _files = click.prompt(".dta file(s)", type=str, default="*")
     else:
@@ -161,6 +169,7 @@ def wbstata(
             default="n",
         )
 
+    # Consolidate files to convert
     if PROMPT:
         if _files == "*":
             if recursive:
@@ -169,6 +178,11 @@ def wbstata(
                 files = glob("*.dta")
         else:
             files = _files.split(" ")
+    elif all:
+        if recursive:
+            files = glob("**/*.dta", recursive=recursive)     
+        else:
+            files = glob("*.dta")   
 
     if version is None:
         version = click.prompt(
@@ -190,6 +204,9 @@ def wbstata(
         )
     else:
         output = None
+
+    if verbose:
+        click.echo(f"dta files to be converted: {files}")
     # click.echo(files)
     # import sys
     # if files==["*"]:
