@@ -20,6 +20,7 @@ lint: ## Check with mypy, pyflakes, black
 	mypy wbStata/*.py $(MYPY_OPTS)
 	python -m pyflakes wbStata/*.py
 	python -m pyflakes tests/*.py
+	python -m pyflakes setup.py
 
 .PHONY: clean-dta
 clean-dta: ## Remove unoriginal dta artifacts (e.g. auto-v13.dta)

@@ -40,7 +40,7 @@ def is_dta_file(filename: str) -> bool:
         raise ClickException(f"{filename} is not a valid path to a dta file.")
 
 
-def convert_dta(input: str, output: str, version) -> None:
+def convert_dta(input: str, output: str, target_version) -> None:
     """Convert dta file."""
     map_versions = {
         10: 114,
@@ -52,7 +52,7 @@ def convert_dta(input: str, output: str, version) -> None:
         16: None,
         17: None,
     }
-    version = map_versions[version]
+    version = map_versions[target_version]
     pd.read_stata(input).to_stata(output, version=version, write_index=False)
 
 
@@ -65,7 +65,7 @@ def add_suffix(filename: str, suffix: str) -> str:
 
 def get_output_name(
     file: str,
-    version: int,
+    target_version: int,
     overwrite: bool,
     suffix: Optional[str] = None,
     output: Optional[str] = None,
@@ -81,7 +81,7 @@ def get_output_name(
                 filename = add_suffix(file, suffix)
                 return filename
             else:
-                filename = add_suffix(file, f"-v{version}")
+                filename = add_suffix(file, f"-v{target_version}")
                 return filename
 
 
@@ -105,18 +105,18 @@ CONTEXT_SETTINGS = {
     "files", nargs=-1, required=False, type=str, metavar="<dta files>"
 )
 @click.option(
+    "-t",
+    "--target-version",
+    help="Which version of Stata to convert to.",
+    type=int,
+    metavar="<int>",
+)
+@click.option(
     "-a",
     "--all",
     help="Convert all dta files in path.",
     is_flag=True,
     flag_value=True,
-)
-@click.option(
-    "-v",
-    "--version",
-    help="Which version of Stata to convert to.",
-    type=int,
-    metavar="<int>",
 )
 @click.option(
     "-s",
@@ -148,11 +148,11 @@ CONTEXT_SETTINGS = {
     flag_value=True,
 )
 @click.option(
-    "-ve", "--verbose", help="Print messages.", is_flag=True, flag_value=True
+    "-v", "--verbose", help="Print messages.", is_flag=True, flag_value=True
 )
 def wbstata(
     files: Sequence[str],
-    version: Optional[int],
+    target_version: Optional[int],
     suffix: Optional[str],
     output: Optional[str],
     all: bool,
@@ -211,12 +211,12 @@ def wbstata(
         files = glob_dta_files(recursive=recursive)
 
     # Prompt outstanding settings
-    if version is None:
+    if target_version is None:
         click.echo(
             "\nThe Stata version do you want to convert to. This is equivalently the"
         )
         click.echo("version of Stata you have.")
-        version = click.prompt("> Target version", type=int, default=13)
+        target_version = click.prompt("> Target version", type=int, default=13)
 
     if PROMPT and (suffix is None) and (len(files) != 1):
         click.echo(
@@ -225,24 +225,24 @@ def wbstata(
         click.echo(
             "means that auto.dta will be converted and saved as auto-old.dta. Default"
         )
-        click.echo(f"is to use ''-v{version}''.")
+        click.echo(f"is to use ''-v{target_version}''.")
         suffix = click.prompt(
             "> File suffix for saving",
             type=str,
-            default=f"-v{version}",
+            default=f"-v{target_version}",
         )
     if PROMPT and (len(files) == 1):
         filename_no_extension = files[0].split(".dta")[0]
         click.echo(
-            f"\nFile name for saving. Default is to save using the ''-v{version}'' suffix. For"
+            f"\nFile name for saving. Default is to save using the ''-v{target_version}'' suffix. For"
         )
         click.echo(
-            f"example, ''auto.dta'' will be converted and saved as auto-v{version}.dta."
+            f"example, ''auto.dta'' will be converted and saved as auto-v{target_version}.dta."
         )
         output = click.prompt(
             "> Save file as",
             type=str,
-            default=f"{filename_no_extension}-v{version}.dta",
+            default=f"{filename_no_extension}-v{target_version}.dta",
         )
     else:
         output = None
@@ -271,24 +271,22 @@ def wbstata(
         assert is_dta_file(filename)
         if overwrite:
             click.echo(OVERWRITE_WARNING)
-            convert_dta(filename, filename, version)
+            convert_dta(filename, filename, target_version)
             if verbose:
                 click.secho("+ Converted: ", fg="green", bold=True, nl=False)
-                click.echo(f"Done overwriting {filename} in version {version}.")
+                click.echo(f"Done overwriting {filename} in version {target_version}.")
         else:
             out = get_output_name(
                 filename,
-                version=version,
+                target_version=target_version,
                 overwrite=overwrite,
                 output=output,
                 suffix=suffix,
             )
-            convert_dta(filename, out, version)
+            convert_dta(filename, out, target_version)
             if verbose:
                 click.secho("+ Converted: ", fg="green", bold=True, nl=False)
-                click.echo(
-                    f"Done writing {filename} to {out} in version {version}."
-                )
+                click.echo(f"{filename} to {out} in version {target_version}.")
     else:
         for file in files:
             try:
@@ -302,32 +300,31 @@ def wbstata(
                 continue
             if overwrite:
                 click.echo(OVERWRITE_WARNING)
-                convert_dta(file, file, version)
+                convert_dta(file, file, target_version)
                 if verbose:
                     click.secho(
                         "+ Converted: ", fg="green", bold=True, nl=False
                     )
-                    click.echo(f"Done overwriting {file} in version {version}.")
+                    click.echo(f"Done overwriting {file} in version {target_version}.")
             else:
                 out = get_output_name(
                     file,
-                    version=version,
+                    target_version=target_version,
                     overwrite=overwrite,
                     output=output,
                     suffix=suffix,
                 )
-                convert_dta(file, out, version)
+                convert_dta(file, out, target_version)
                 if verbose:
                     click.secho(
                         "+ Converted: ", fg="green", bold=True, nl=False
                     )
-                    click.echo(
-                        f"Done writing {file} to {out} in version {version}."
-                    )
+                    click.echo(f"{file} to {out} in version {target_version}.")
 
     if verbose:
         if len(files) > 0:
             click.secho("Success: ", fg="green", bold=True, nl=False)
             click.echo("Conversions complete.")
+            from termcolor import colored
         else:
             click.echo("+ Nothing to convert.")
