@@ -1,6 +1,7 @@
 # wbStata
 
-Find your way back to older versions of Stata `.dta` files.
+`wbStata` is a CLI utility to easily convert between (or, go way back to) versions of Stata's `.dta`, which are not forward compatible. 
+
 
 
 ## Statement of Need
@@ -13,6 +14,7 @@ So what is one to do when you try to open a `dta` file in Stata and get a rude `
   <p align="center"><img width="100%" src="./assets/gfy-error.png"></p>
 </details>
 
+Find your way back to older versions of Stata `.dta` files with `wbStata`.
 `wbStata` is a quick and dead simple CLI (command-line interface) to go way back with Stata data (`.dta`) files. You *do not need access to* newer `Stata` versions.
 
 
@@ -47,7 +49,7 @@ So what is one to do when you try to open a `dta` file in Stata and get a rude `
 
 
 ## About this utility
-`wbStata` is a CLI utility to easily convert between (or, go way back to) versions of Stata's `.dta`, which are not forward compatible. 
+`WbStata` wraps around [`click`](https://click.palletsprojects.com/) and [`pandas`](https://github.com/pandas-dev/pandas)'s [`DataFrame.to_Stata`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_stata.html) utility. Using `wbStata`, easily convert new Stata `dta` files to older versions.
 
 <details><summary>Show CLI help reference</summary>
   
@@ -73,4 +75,4 @@ So what is one to do when you try to open a `dta` file in Stata and get a rude `
   ```
 </details>
   
-This utility wraps around [`click`](https://click.palletsprojects.com/) and [`pandas`](https://github.com/pandas-dev/pandas)'s [`DataFrame.to_Stata`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_stata.html) utility.
+
