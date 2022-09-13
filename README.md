@@ -11,7 +11,7 @@ Stata `.dta` data files are not forward compatible.
 This means you cannot use older versions (e.g., `Stata 13`) to read a `.dta` file exported from newer versions (e.g., `Stata 17`).
 
 So what is one to do when you try to open a `dta` file in Stata and get a rude `dta too modern r(601)` error:
-<details open><summary>...</summary>
+<details open><summary><em>...</em></summary>
   <p align="center"><img width="100%" src="./assets/gfy-error.png"></p>
 </details>
 
@@ -36,12 +36,15 @@ Find your way back to older versions of Stata `.dta` files with `wbStata`.
 
 
 ## More about the problem
-* [[1]](https://www.stata.com/support/faqs/data-management/save-for-previous-version/) Stata support FAQs: How can I save a Stata dataset so that it can be read by a previous version of Stata?
-* [[2]](https://www.statalist.org/forums/forum/general-stata-discussion/general/1440296-how-to-read-a-stata-15-data-file-in-stata-13) how to read a stata 15 data file in stata 13.
-* [[3]](https://www.statalist.org/forums/forum/general-stata-discussion/general/1326849-how-to-open-stata-14-files-in-stata-12-13) How to open stata 14 files in Stata 12-13.
-* [[4]](https://www.statalist.org/forums/forum/general-stata-discussion/general/1373797-how-to-open-a-new-stata-dataset-version) How to open a new stata dataset version.
-* [[5]](https://www.statalist.org/forums/forum/general-stata-discussion/general/1363089-how-to-open-a-file-that-is-more-from-a-more-recent-version-of-stata-into-stata13) How to open a file that is more from a more recent version of Stata into Stata13.
-* [[6]](https://www.reddit.com/r/stata/comments/4ufos2/convert_stata_14_dta_file_t) Convert Stata 14 .dta file to Stata 13.
+<details open><summary><em>Assortment of enquires about the error</em></summary>
+  
+  * [[1]](https://www.stata.com/support/faqs/data-management/save-for-previous-version/) Stata support FAQs: How can I save a Stata dataset so that it can be read by a previous version of Stata?
+  * [[2]](https://www.statalist.org/forums/forum/general-stata-discussion/general/1440296-how-to-read-a-stata-15-data-file-in-stata-13) how to read a stata 15 data file in stata 13.
+  * [[3]](https://www.statalist.org/forums/forum/general-stata-discussion/general/1326849-how-to-open-stata-14-files-in-stata-12-13) How to open stata 14 files in Stata 12-13.
+  * [[4]](https://www.statalist.org/forums/forum/general-stata-discussion/general/1373797-how-to-open-a-new-stata-dataset-version) How to open a new stata dataset version.
+  * [[5]](https://www.statalist.org/forums/forum/general-stata-discussion/general/1363089-how-to-open-a-file-that-is-more-from-a-more-recent-version-of-stata-into-stata13) How to open a file that is more from a more recent version of Stata into Stata13.
+  * [[6]](https://www.reddit.com/r/stata/comments/4ufos2/convert_stata_14_dta_file_t) Convert Stata 14 .dta file to Stata 13.
+</details>  
 
 ## Alternative solutions
 Based on proposed solutions in [More about the problem](#more-about-the-problem).
@@ -52,7 +55,7 @@ Based on proposed solutions in [More about the problem](#more-about-the-problem)
 ## About this utility
 `WbStata` is an open source utility that wraps around [`click`](https://click.palletsprojects.com/) and [`pandas`](https://github.com/pandas-dev/pandas)'s [`DataFrame.to_Stata`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_stata.html) utility. Using `wbStata`, easily convert new Stata `dta` files to older versions.
 
-<details><summary>Show CLI help reference</summary>
+<details><summary><em>Show CLI help reference</em></summary>
   
   ```console
   $ wbstata -h
