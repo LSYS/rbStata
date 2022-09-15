@@ -25,8 +25,8 @@ lint: ## Check with mypy, pyflakes, black
 .PHONY: clean-dta
 clean-dta: ## Remove unoriginal dta artifacts (e.g. auto-v13.dta)
 	@echo "+ $@"
-	@find . -type f -name '*v*.dta' -exec rm -f {} +
-	@find . -type f -name '*v.dta' -exec rm -f {} +
+	@find . -type f -name '*_v*.dta' -exec rm -f {} +
+	@find . -type f -name '*_v.dta' -exec rm -f {} +
 	@find . -type f -name '*-*.dta' -exec rm -f {} +
 	@find . -type f -name '*test*.dta' -exec rm -f {} +
 

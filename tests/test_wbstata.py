@@ -136,9 +136,9 @@ def test_wbstata():
     assert "> Target version" in result.output
 
     # Check minimal command
-    dta = "datasets2/census.dta"
+    dta = "datasets/census.dta"
     expected_output = (
-        f"{dta} to datasets2/census-v13.dta in version 13.\n"
+        f"{dta} to datasets/census-v13.dta in version 13.\n"
     )
     result = runner.invoke(wbstata, [f"{dta}", "--target-version", "13", "--verbose"])
     assert result.exit_code == 0
@@ -146,9 +146,9 @@ def test_wbstata():
     assert COMPLETION_MSG in result.output
 
     # Check multiple
-    dta1 = "datasets2/census.dta"
-    dta2 = "datasets2/auto.dta"
-    dta3 = "datasets2/lifeexp.dta"
+    dta1 = "datasets/census.dta"
+    dta2 = "datasets/auto.dta"
+    dta3 = "datasets/lifeexp.dta"
     result = runner.invoke(
         wbstata,
         [f"{dta1}", f"{dta2}", f"{dta3}", "--target-version", "13", "--verbose"],

@@ -90,7 +90,7 @@ def glob_dta_files(recursive: bool) -> list:
     if recursive:
         files = glob("**/*.dta", recursive=recursive)
     else:
-        files = glob("*.dta")
+        files = glob("*.dta", recursive=recursive)
     return files
 
 
@@ -155,10 +155,10 @@ def wbstata(
     target_version: Optional[int],
     suffix: Optional[str],
     output: Optional[str],
-    all: bool,
-    recursive: bool,
-    overwrite: bool,
-    verbose: bool,
+    all: bool = False,
+    overwrite: bool = False,
+    recursive: bool = False,
+    verbose: bool = False,
 ) -> None:
     """Find your way back to older versions of dta files.
 
