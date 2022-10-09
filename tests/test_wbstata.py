@@ -63,13 +63,17 @@ def test_get_output_name():
     # Using output option
     output = "output.dta"
     expected = output
-    result = get_output_name(file, target_version=13, overwrite=False, output=output)
+    result = get_output_name(
+        file, target_version=13, overwrite=False, output=output
+    )
     assert result == expected
 
     # Using suffix
     suffix = "-v13"
     expected = add_suffix(file, suffix)
-    result = get_output_name(file, target_version=13, overwrite=False, suffix=suffix)
+    result = get_output_name(
+        file, target_version=13, overwrite=False, suffix=suffix
+    )
     assert result == expected
 
     # Using default
@@ -106,7 +110,9 @@ def test_glob_dta_files():
 def test_convert_dta():
     for version in range(10, 17 + 1):
         convert_dta(
-            "datasets/census.dta", "datasets/test-output.dta", target_version=version
+            "datasets/census.dta",
+            "datasets/test-output.dta",
+            target_version=version,
         )
 
 
@@ -137,10 +143,10 @@ def test_wbstata():
 
     # Check minimal command
     dta = "datasets/census.dta"
-    expected_output = (
-        f"{dta} to datasets/census-v13.dta in version 13.\n"
+    expected_output = f"{dta} to datasets/census-v13.dta in version 13.\n"
+    result = runner.invoke(
+        wbstata, [f"{dta}", "--target-version", "13", "--verbose"]
     )
-    result = runner.invoke(wbstata, [f"{dta}", "--target-version", "13", "--verbose"])
     assert result.exit_code == 0
     assert expected_output in result.output
     assert COMPLETION_MSG in result.output
@@ -151,7 +157,14 @@ def test_wbstata():
     dta3 = "datasets/lifeexp.dta"
     result = runner.invoke(
         wbstata,
-        [f"{dta1}", f"{dta2}", f"{dta3}", "--target-version", "13", "--verbose"],
+        [
+            f"{dta1}",
+            f"{dta2}",
+            f"{dta3}",
+            "--target-version",
+            "13",
+            "--verbose",
+        ],
     )
     assert result.exit_code == 0
     assert f"{dta1}" in result.output
@@ -173,7 +186,8 @@ def test_wbstata():
 
     # Check that error is caught one if the files does not exist
     result = runner.invoke(
-        wbstata, [f"{dta1}", f"{invalid_file}", "--target-version", "13", "--verbose"]
+        wbstata,
+        [f"{dta1}", f"{invalid_file}", "--target-version", "13", "--verbose"],
     )
     assert result.exit_code == 0
     assert (
@@ -194,7 +208,8 @@ def test_wbstata():
     # Check that overwrite works with verbose
     _ver = 17
     result = runner.invoke(
-        wbstata, [f"{dta1}", "--target-version", f"{_ver}", "--overwrite", "--verbose"]
+        wbstata,
+        [f"{dta1}", "--target-version", f"{_ver}", "--overwrite", "--verbose"],
     )
     assert result.exit_code == 0
     assert OVERWRITE_WARNING in result.output
@@ -217,7 +232,9 @@ def test_wbstata():
     assert result.exit_code == 0
 
     # Check that messages are correct if no valid dta files are found
-    result = runner.invoke(wbstata, ["--all", "--target-version", "13", "--verbose"])
+    result = runner.invoke(
+        wbstata, ["--all", "--target-version", "13", "--verbose"]
+    )
     assert result.exit_code == 0
     assert "dta files entered:" in result.output
     assert "Valid dta files to be converted:" in result.output

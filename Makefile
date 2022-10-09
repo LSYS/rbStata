@@ -8,6 +8,7 @@ test: ## Run tests with pytest and coverage
 	coverage run -m pytest -v
 	coverage report -m
 	@rm -rf temp
+	make clean-dta
 
 .PHONY: lint
 MYPY_OPTS := --ignore-missing-imports
