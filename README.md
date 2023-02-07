@@ -3,8 +3,10 @@
 `wbStata` is a CLI utility to easily convert between (or, go way back to) versions of Stata's `.dta`, which are not forward compatible. 
 * Cross-platform CLI utility: Windows, Mac, Linux.
 * No knowledge of Python required (but requires a Python installation).
-* Unicode to ASCII transliteration (older versions of Stata do not support Unicode)
+* ? Takes care of Unicode to ASCII transliteration (older versions of Stata do not support Unicode)
 * Works with Python 3.6+.
+* ?Takes care of variable label transferring
+* ?Takes care of data label transferring
 
 ## Statement of Need
 
