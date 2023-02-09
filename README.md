@@ -7,6 +7,7 @@
 * Works with Python 3.6+.
 * ?Takes care of variable label transferring
 * ?Takes care of data label transferring
+* ?Takes care of value labels
 
 ## Statement of Need
 
