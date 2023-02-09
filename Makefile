@@ -14,13 +14,20 @@ MYPY_OPTS := --ignore-missing-imports
 BLACK_OPTS := --line-length 80
 lint: ## Check with mypy, pyflakes, black
 	@echo "+ $@"
-	black setup.py $(BLACK_OPTS)
-	black wbStata/*.py $(BLACK_OPTS)
-	black tests/*.py $(BLACK_OPTS)
-	mypy wbStata/*.py $(MYPY_OPTS)
+	@echo "+ pyflakes"
 	python -m pyflakes wbStata/*.py
 	python -m pyflakes tests/*.py
 	python -m pyflakes setup.py
+	@echo "+ Static typing"
+	mypy wbStata/*.py $(MYPY_OPTS)
+	@echo "+ docstrings"
+	pydocstyle --convention numpy
+	@echo "+ imports"
+	isort .
+# 	@echo "+ Black"
+# 	black setup.py $(BLACK_OPTS)
+# 	black wbStata/*.py $(BLACK_OPTS)
+# 	black tests/*.py $(BLACK_OPTS)
 
 .PHONY: clean-dta
 clean-dta: ## Remove unoriginal dta artifacts (e.g. auto-v13.dta)
