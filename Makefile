@@ -25,10 +25,10 @@ lint: ## Check with mypy, pyflakes, black
 	pydocstyle --convention numpy
 	@echo "+ imports"
 	isort .
-# 	@echo "+ Black"
-# 	black setup.py $(BLACK_OPTS)
-# 	black wbStata/*.py $(BLACK_OPTS)
-# 	black tests/*.py $(BLACK_OPTS)
+	@echo "+ Black"
+	black setup.py $(BLACK_OPTS)
+	black wbStata/*.py $(BLACK_OPTS)
+	black tests/*.py $(BLACK_OPTS)
 
 .PHONY: clean-dta
 clean-dta: ## Remove unoriginal dta artifacts (e.g. auto-v13.dta)

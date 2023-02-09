@@ -1,11 +1,13 @@
-import click
-from click import ClickException
-from typing import Sequence, Optional
-from pathlib import Path
+"""Main user-facing function."""
 import re
-import pandas as pd
 from glob import glob
+from pathlib import Path
+from typing import Optional, Sequence
+
+import click
+import pandas as pd
 from anyascii import anyascii
+from click import ClickException
 
 
 def normalize_filename(filename: str) -> str:
@@ -98,7 +100,7 @@ def get_output_name(
 
 
 def glob_dta_files(recursive: bool) -> list:
-    """Get all files with .dta extension"""
+    """Get all files with .dta extension."""
     if recursive:
         files = glob("**/*.dta", recursive=recursive)
     else:

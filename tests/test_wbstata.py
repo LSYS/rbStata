@@ -1,14 +1,17 @@
-from wbStata.cli import normalize_dta_filename
-from wbStata.cli import convert_dta
-from wbStata.cli import add_suffix
-from wbStata.cli import get_output_name
-from wbStata.cli import normalize_filename
-from wbStata.cli import is_dta_file
-from wbStata.cli import glob_dta_files
-from click.testing import CliRunner
-from wbStata.cli import wbstata
 import pytest
 from click import ClickException
+from click.testing import CliRunner
+
+from wbStata.cli import (
+    add_suffix,
+    convert_dta,
+    get_output_name,
+    glob_dta_files,
+    is_dta_file,
+    normalize_dta_filename,
+    normalize_filename,
+    wbstata,
+)
 
 
 def test_normalize_dta_filename():
