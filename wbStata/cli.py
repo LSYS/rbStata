@@ -4,14 +4,28 @@ from glob import glob
 from pathlib import Path
 from typing import Optional, Sequence
 
-import click
+# import click
 import pandas as pd
 from anyascii import anyascii
-from click import ClickException
+# from click import ClickException
 
 
 def normalize_filename(filename: str) -> str:
-    """Normalize filenames by removing whitespaces and lower casing."""
+    """Normalize filenames by removing whitespaces and lower casing.
+
+    Parameters
+    ----------
+    filename: str
+    
+    Examples
+    --------
+    >>> normalize_filename("File.dta ")
+    'file.dta'
+
+    Returns
+    -------
+    Str
+    """
     # Remove extra whitespaces
     re_extra_whitespaces = re.compile(r"\s+")
     filename = re_extra_whitespaces.sub("", filename).strip()
@@ -20,7 +34,21 @@ def normalize_filename(filename: str) -> str:
 
 
 def normalize_dta_filename(filename: str) -> str:
-    """Ensure that string for filename to write to is normalize with .dta extension."""
+    """Ensure that string for filename to write to is normalized with .dta extension.
+
+    Parameters
+    ----------
+    filename: str
+
+    Examples
+    --------
+    >>> normalize_dta_filename("output")
+    'output.dta'
+
+    Returns
+    -------
+    Str
+    """
     dta_filename = Path(filename)
     if dta_filename.suffix != ".dta":
         filename = "".join([filename, ".dta"])
@@ -30,7 +58,26 @@ def normalize_dta_filename(filename: str) -> str:
 
 
 def is_dta_file(filename: str) -> bool:
-    """Check if filename is a valid path to a dta file."""
+    """Check if filename is a valid path to a dta file.
+
+    Parameters
+    ----------
+    filename: str
+
+    Examples
+    --------
+    >>> is_dta_file("./datasets/auto.dta")
+    True
+
+    Returns
+    -------
+    Bool
+
+    Raises
+    ------
+    ClickException
+        If the filename input does not point to a valid dta file.
+    """
     path = Path(filename)
     if path.suffix == ".dta":
         is_dta = True
@@ -43,8 +90,30 @@ def is_dta_file(filename: str) -> bool:
         raise ClickException(f"{filename} is not a valid path to a dta file.")
 
 
-def convert_dta(input: str, output: str, target_version) -> None:
-    """Convert dta file."""
+def convert_dta(input: str, output: str, target_version: int) -> None:
+    """Convert dta file.
+
+    This function takes care of mapping Stata versions to the versions
+    recognized by pandas. The function also takes care of UnicodeEncodeError's
+    by converting unicode strings to ascii using the anyascii package.
+
+    Parameters
+    ----------
+    input: str
+        Input (source) dta file to convert.
+    output: str
+        Output (destination) dta file after conversion.
+    target_version: int
+        Stata version to convert to.
+    
+    Example
+    -------
+    >>> convert_dta("datasets/auto.dta", "datasets/doctest-out.dta", 13)
+
+    Returns
+    -------
+    None
+    """
     map_versions = {
         10: 114,
         11: 114,
@@ -71,7 +140,28 @@ def convert_dta(input: str, output: str, target_version) -> None:
 
 
 def add_suffix(filename: str, suffix: str) -> str:
-    """Add suffix to filename."""
+    """Add suffix to filename.
+
+    Parameters
+    ----------
+    filename: str
+        Filename that suffix is to be added to.
+    suffix: str
+        Suffix string to be added to filename.
+
+    Examples
+    --------
+    >>> add_suffix("filename.dta", "-wbstata")
+    'filename-wbstata.dta'
+
+    >>> add_suffix("filename.dta", "")
+    'filename.dta'
+
+    Returns
+    -------
+    Str
+        Filename with added suffix.
+    """
     filename, ext = filename.split(".")
     filename = "".join([filename, suffix, ".", ext])
     return filename
@@ -84,7 +174,37 @@ def get_output_name(
     suffix: Optional[str] = None,
     output: Optional[str] = None,
 ) -> str:
-    """Get output name for the file to be saved."""
+    """Get output name for the file to be saved.
+
+    Parameters
+    ----------
+    file: str
+        Filename of file.
+    target_version: int
+        Stata version to convert to.
+    overwrite: bool
+        If True, overwrite existing input (source) file.
+    suffix: str
+        (Optional) Suffix string to be added to filename.
+    output: str
+        (Optional) Filename for output. If None, use suffix to create output name.
+
+    Examples
+    --------
+    >>> get_output_name("input.dta", 13, True)
+    'input.dta'
+    >>> get_output_name("input.dta", 13, True, "-suffix")
+    'input.dta'
+    >>> get_output_name("input.dta", 13, False, "-suffix")
+    'input-suffix.dta'
+    >>> get_output_name("input.dta", 13, False, output="output.dta")
+    'output.dta'
+
+    Returns
+    -------
+    Str
+        Filename for saving the output.
+    """
     if overwrite:
         return file
     else:
@@ -100,7 +220,18 @@ def get_output_name(
 
 
 def glob_dta_files(recursive: bool) -> list:
-    """Get all files with .dta extension."""
+    """Get all files with .dta extension.
+
+    Parameters
+    ----------
+    recursive: bool
+        If True, include dta files in subdirectories.
+
+    Returns
+    -------
+    List
+        List of dta files to be batch converted.
+    """
     if recursive:
         files = glob("**/*.dta", recursive=recursive)
     else:
@@ -108,10 +239,10 @@ def glob_dta_files(recursive: bool) -> list:
     return files
 
 
-CONTEXT_SETTINGS = {
-    "help_option_names": ("-h", "--help"),
-    "max_content_width": 90,
-}
+CONTEXT_SETTINGS = dict(
+    help_option_names= ("-h", "--help"),
+    max_content_width= 90,
+)
 
 
 @click.command(context_settings=CONTEXT_SETTINGS)
@@ -178,6 +309,29 @@ def wbstata(
 
     Convert newer Stata .dta files to older versions so that you can open them
     in older Stata versions.
+
+    Parameters
+    ----------
+    files: list-like
+        List of dta files to be converted.
+    target_version: int
+        Stata version to convert to.
+    suffix: str
+        (Optional) Suffix string to be added to filename.
+    output: str
+        (Optional) Filename for output. If None, use suffix to create output name.           
+    all: bool
+        If True, glob the dta files in path. Default is False.
+    overwrite: bool
+        If True, overwrite existing input (source) file. Default is False.
+    recursive: bool
+        If True, glob dta files in subdirectories. Default is False.
+    verbose: bool
+        If True, print messages to stdout. Default is False.
+        
+    Returns
+    -------
+    None
     """
     if (len(files) == 0) and (not all):
         PROMPT = True
