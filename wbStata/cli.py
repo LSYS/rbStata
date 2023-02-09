@@ -5,6 +5,7 @@ from pathlib import Path
 import re
 import pandas as pd
 from glob import glob
+from anyascii import anyascii
 
 
 def normalize_filename(filename: str) -> str:
@@ -53,7 +54,18 @@ def convert_dta(input: str, output: str, target_version) -> None:
         17: None,
     }
     version = map_versions[target_version]
-    pd.read_stata(input).to_stata(output, version=version, write_index=False)
+    try:
+        pd.read_stata(input).to_stata(
+            output, version=version, write_index=False
+        )
+    except UnicodeEncodeError:
+        df = pd.read_stata(input)
+        for col in df.columns:
+            try:
+                df[col] = df[col].apply(lambda x: anyascii(x))
+            except TypeError:
+                pass
+        df.to_stata(output, version=version, write_index=False)
 
 
 def add_suffix(filename: str, suffix: str) -> str:
@@ -274,7 +286,9 @@ def wbstata(
             convert_dta(filename, filename, target_version)
             if verbose:
                 click.secho("+ Converted: ", fg="green", bold=True, nl=False)
-                click.echo(f"Done overwriting {filename} in version {target_version}.")
+                click.echo(
+                    f"Done overwriting {filename} in version {target_version}."
+                )
         else:
             out = get_output_name(
                 filename,
@@ -305,7 +319,9 @@ def wbstata(
                     click.secho(
                         "+ Converted: ", fg="green", bold=True, nl=False
                     )
-                    click.echo(f"Done overwriting {file} in version {target_version}.")
+                    click.echo(
+                        f"Done overwriting {file} in version {target_version}."
+                    )
             else:
                 out = get_output_name(
                     file,
@@ -325,6 +341,5 @@ def wbstata(
         if len(files) > 0:
             click.secho("Success: ", fg="green", bold=True, nl=False)
             click.echo("Conversions complete.")
-            from termcolor import colored
         else:
             click.echo("+ Nothing to convert.")

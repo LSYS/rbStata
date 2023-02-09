@@ -3,7 +3,11 @@
 `wbStata` is a CLI utility to easily convert between (or, go way back to) versions of Stata's `.dta`, which are not forward compatible. 
 * Cross-platform CLI utility: Windows, Mac, Linux.
 * No knowledge of Python required (but requires a Python installation).
+* ? Takes care of Unicode to ASCII transliteration (older versions of Stata do not support Unicode)
 * Works with Python 3.6+.
+* ?Takes care of variable label transferring
+* ?Takes care of data label transferring
+* ?Takes care of value labels
 
 ## Statement of Need
 
@@ -21,19 +25,42 @@ Find your way back to older versions of Stata `.dta` files with `wbStata`.
 
 ## Quick usage
 
-* **Simple and Single-line command-line usage:**
+* **Simple single-line command-line usage:**
   * Convert the `auto.dta` file so that you can open it in Stata 13
-    <pre>$ wbstata auto.dta --version 13 --verbose</pre>
+    <pre>$ wbstata auto.dta --target-version 13 --verbose</pre>
   
   * Convert all `dta` files in the path so that you can open it in Stata 13
-    <pre>$ wbstata --all --version 13 --verbose</pre>
+    <pre>$ wbstata --all --target-version 13 --verbose</pre>
   
 
 * **Let `wbStata` prompt you for relevant settings:** <br>
-  (press enter to accept default settings in brackets)
-  * `dta file(s)` [*]: `dta file(s)` to be converted 
-  * `version` [13]: `version` to convert to (or the `Stata` version you have)
+  
+  Type `wbstata` and enter settings (press enter to accept default settings in brackets):
+  <pre>$ wbstata</pre>
+  ```console
+  -------------------------------------------------------------
+  Welcome to the wbStata quickstart command-line utility.
 
+  You will be prompted for relevant settings.
+
+  Please enter values under the following settings.
+  (just press Enter to accept the default value in brackets)
+  -------------------------------------------------------------
+
+  Enter the dta file(s) you want to convert (e.g. ''auto.dta''). It is not
+  necessary to key in the .dta extension (e.g. just type ''auto''). Press
+  Enter to include all .dta files in the current directory.
+  > .dta file(s) [*]:
+  ...
+  ```
+<details><summary><em>Settings [defaults]</em></summary>
+
+  * `.dta file(s)` [*]: .dta files to convert [all .dta files in current directory]
+  * `Include subdirectories (y/n) [n]`: Include subdirectories if * [no]
+  * `Target version [13]`: version to convert to [Stata v13]  
+  * `File suffix for saving [-v13]`: Suffix for saving [E.g. save auto.dta to auto-v13.dta]
+  * `Print messages (y/n) [y]`: Print all messages and errors [yes]
+</details>
 
 ## More about the problem
 <details open><summary><em>Assortment of enquires about the error</em></summary>
@@ -55,7 +82,7 @@ Based on proposed solutions in [More about the problem](#more-about-the-problem)
 ## About this utility
 `WbStata` is an open source utility that wraps around [`click`](https://click.palletsprojects.com/) and [`pandas`](https://github.com/pandas-dev/pandas)'s [`DataFrame.to_Stata`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_stata.html) utility. Using `wbStata`, easily convert new Stata `dta` files to older versions.
 
-<details><summary><em>Show CLI help reference</em></summary>
+<details><summary><em>Expose CLI help reference</em></summary>
   
   ```console
   $ wbstata -h

@@ -8,7 +8,8 @@ with open("README.md", encoding="utf-8") as readme_file:
 
 install_requires = [
     # 'pandas',
-    'click>=8.*'
+    "anyascii"
+    "click>=8.*"
 ]
 
 setup(

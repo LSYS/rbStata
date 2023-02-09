@@ -25,9 +25,9 @@ jobs:
           pip install black pyflakes mypy
       - name: Check black formatter and pyflakes
         run: |
-          black setup.py --line-length 80
-          black wbStata/*.py --line-length 80
-          black tests/*.py --line-length 80
+          black setup.py --check --line-length 80
+          black wbStata/*.py --check --line-length 80
+          black tests/*.py --check --line-length 80
           mypy wbStata/*.py --ignore-missing-imports
           python -m pyflakes wbStata/*.py
           python -m pyflakes tests/*.py
