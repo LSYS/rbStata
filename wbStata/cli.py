@@ -439,7 +439,6 @@ def wbstata(
         else:
             out = get_output_name(
                 filename,
-                target_version=target_version,
                 overwrite=overwrite,
                 output=output,
                 suffix=suffix,
@@ -450,40 +449,40 @@ def wbstata(
                 click.echo(f"{filename} to {out} in version {target_version}.")
     # Conversion for batch of files
     else:
-        for file in files:
-            try:
-                is_dta_file(file)
-            except ClickException:
-                click.secho(
-                    f"Error: {file} is not a valid path to a dta file.",
-                    fg="red",
-                    err=True,
-                )
-                continue
-            if overwrite:
-                click.echo(OVERWRITE_WARNING)
-                convert_dta(file, file, target_version)
-                if verbose:
+        with click.progressbar(files, label="label", length=len(files)) as pb_files:
+            for file in pb_files:
+                try:
+                    is_dta_file(file)
+                except ClickException:
                     click.secho(
-                        "+ Converted: ", fg="green", bold=True, nl=False
+                        f"Error: {file} is not a valid path to a dta file.",
+                        fg="red",
+                        err=True,
                     )
-                    click.echo(
-                        f"Done overwriting {file} in version {target_version}."
+                    continue
+                if overwrite:
+                    click.echo(OVERWRITE_WARNING)
+                    convert_dta(file, file, target_version)
+                    if verbose:
+                        click.secho(
+                            "+ Converted: ", fg="green", bold=True, nl=False
+                        )
+                        click.echo(
+                            f"Done overwriting {file} in version {target_version}."
+                        )
+                else:
+                    out = get_output_name(
+                        file,
+                        overwrite=overwrite,
+                        output=output,
+                        suffix=suffix,
                     )
-            else:
-                out = get_output_name(
-                    file,
-                    target_version=target_version,
-                    overwrite=overwrite,
-                    output=output,
-                    suffix=suffix,
-                )
-                convert_dta(file, out, target_version)
-                if verbose:
-                    click.secho(
-                        "+ Converted: ", fg="green", bold=True, nl=False
-                    )
-                    click.echo(f"{file} to {out} in version {target_version}.")
+                    convert_dta(file, out, target_version)
+                    if verbose:
+                        click.secho(
+                            "+ Converted: ", fg="green", bold=True, nl=False
+                        )
+                        click.echo(f"{file} to {out} in version {target_version}.")
 
     if verbose:
         if len(files) > 0:
