@@ -47,9 +47,9 @@ Find your way back to older versions of Stata `.dta` files with `wbStata`.
   (just press Enter to accept the default value in brackets)
   -------------------------------------------------------------
 
-  Enter the dta file(s) you want to convert (e.g. ''auto.dta''). It is not
-  necessary to key in the .dta extension (e.g. just type ''auto''). Press
-  Enter to include all .dta files in the current directory.
+  Enter the dta file(s) you want to convert (e.g. ''auto.dta'').
+  (It is not necessary to key in the .dta extension (e.g., just type ''auto'').
+  Press Enter to include all .dta files in the current directory.)
   > .dta file(s) [*]:
   ...
   ```
@@ -57,9 +57,9 @@ Find your way back to older versions of Stata `.dta` files with `wbStata`.
 
   * `.dta file(s)` [*]: .dta files to convert [all .dta files in current directory]
   * `Target version [13]`: version to convert to [Stata v13]  
-  * `File suffix for saving [-v13]`: Suffix for saving [E.g. save auto.dta to auto-v13.dta]
+  * `File suffix for saving [-wbstata]`: Suffix for saving [E.g. save auto.dta to auto-wbstata.dta]
   * `Include subdirectories (y/n) [n]`: Include subdirectories if * [no]
-  * `Print messages (y/n) [y]`: Print all messages and errors [yes]
+  * `Print all messages (y/n) [y]`: Print all messages and errors [yes]
 </details>
 
 ## More about the problem
