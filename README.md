@@ -57,8 +57,8 @@ Find your way back to older versions of Stata `.dta` files with `wbStata`.
 
   * `.dta file(s)` [*]: .dta files to convert [all .dta files in current directory]
   * `Target version [13]`: version to convert to [Stata v13]  
-  * `Include subdirectories (y/n) [n]`: Include subdirectories if * [no]
   * `File suffix for saving [-v13]`: Suffix for saving [E.g. save auto.dta to auto-v13.dta]
+  * `Include subdirectories (y/n) [n]`: Include subdirectories if * [no]
   * `Print messages (y/n) [y]`: Print all messages and errors [yes]
 </details>
 
