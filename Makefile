@@ -40,6 +40,7 @@ clean-dta: ## Remove unoriginal dta artifacts (e.g. auto-v13.dta)
 	@find . -type f -name '*_v.dta' -exec rm -f {} +
 	@find . -type f -name '*-*.dta' -exec rm -f {} +
 	@find . -type f -name '*test*.dta' -exec rm -f {} +
+	@find . -type f -name '*out*.dta' -exec rm -f {} +
 
 .PHONY: clean-test
 clean-test: ## Remove testing and coverage artifacts
