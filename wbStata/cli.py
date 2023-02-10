@@ -125,9 +125,19 @@ def convert_dta(input: str, output: str, target_version: int) -> None:
         17: None,
     }
     version = map_versions[target_version]
+
+    reader_obj = pd.read_stata(input, iterator=True)
+    data_label = reader_obj.data_label
+    variable_labels = reader_obj.variable_labels()
+
+    std_opts_tostata = dict(version=version, write_index=False,
+        data_label=data_label,
+            variable_labels=variable_labels, 
+            )
     try:
         pd.read_stata(input).to_stata(
-            output, version=version, write_index=False
+            output, 
+            **std_opts_tostata
         )
     except UnicodeEncodeError:
         df = pd.read_stata(input)
@@ -136,7 +146,9 @@ def convert_dta(input: str, output: str, target_version: int) -> None:
                 df[col] = df[col].apply(lambda x: anyascii(x))
             except TypeError:
                 pass
-        df.to_stata(output, version=version, write_index=False)
+        df.to_stata(output, 
+            **std_opts_tostata
+            )
 
 
 def add_suffix(filename: str, suffix: str) -> str:
@@ -214,7 +226,7 @@ def get_output_name(
                 filename = add_suffix(file, suffix)
                 return filename
             else:
-                filename = add_suffix(file, f"-wbstata")
+                filename = add_suffix(file, "-wbstata")
                 return filename
 
 
@@ -365,18 +377,18 @@ def wbstata(
         click.echo(
             "\nFile suffix for saving the output file(s).\n"
             "(For example, the suffix ''-old'' means that auto.dta will be converted and\n"
-            f"saved as auto-old.dta. Default is to use ''-wbstata''.)"
+            "saved as auto-old.dta. Default is to use ''-wbstata''.)"
         )
         suffix = click.prompt(
             "> File suffix for saving",
             type=str,
-            default=f"-wbstata",
+            default="-wbstata",
         )
     if PROMPT and (len(files) == 1):
         filename_no_extension = files[0].split(".dta")[0]
         click.echo(
-            f"\nFile name for saving. Default is to save using the ''-wbstata'' suffix. For"
-            f"example, ''auto.dta'' will be converted and saved as auto-wbstata.dta."
+            "\nFile name for saving. Default is to save using the ''-wbstata'' suffix. For"
+            "example, ''auto.dta'' will be converted and saved as auto-wbstata.dta."
         )
         output = click.prompt(
             "> Save file as",

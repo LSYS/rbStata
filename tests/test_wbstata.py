@@ -2,16 +2,9 @@ import pytest
 from click import ClickException
 from click.testing import CliRunner
 
-from wbStata.cli import (
-    add_suffix,
-    convert_dta,
-    get_output_name,
-    glob_dta_files,
-    is_dta_file,
-    normalize_dta_filename,
-    normalize_filename,
-    wbstata,
-)
+from wbStata.cli import (add_suffix, convert_dta, get_output_name,
+                         glob_dta_files, is_dta_file, normalize_dta_filename,
+                         normalize_filename, wbstata)
 
 
 def test_normalize_dta_filename():
