@@ -169,7 +169,6 @@ def add_suffix(filename: str, suffix: str) -> str:
 
 def get_output_name(
     file: str,
-    target_version: int,
     overwrite: bool,
     suffix: Optional[str] = None,
     output: Optional[str] = None,
@@ -180,8 +179,6 @@ def get_output_name(
     ----------
     file: str
         Filename of file.
-    target_version: int
-        Stata version to convert to.
     overwrite: bool
         If True, overwrite existing input (source) file.
     suffix: str
@@ -191,14 +188,16 @@ def get_output_name(
 
     Examples
     --------
-    >>> get_output_name("input.dta", 13, True)
+    >>> get_output_name("input.dta", True)
     'input.dta'
-    >>> get_output_name("input.dta", 13, True, "-suffix")
+    >>> get_output_name("input.dta", True, "-suffix")
     'input.dta'
-    >>> get_output_name("input.dta", 13, False, "-suffix")
+    >>> get_output_name("input.dta", False, "-suffix")
     'input-suffix.dta'
-    >>> get_output_name("input.dta", 13, False, output="output.dta")
+    >>> get_output_name("input.dta", False, output="output.dta")
     'output.dta'
+    >>> get_output_name("input.dta", False, output=None)
+    'input-wbstata.dta'
 
     Returns
     -------
@@ -215,7 +214,7 @@ def get_output_name(
                 filename = add_suffix(file, suffix)
                 return filename
             else:
-                filename = add_suffix(file, f"-v{target_version}")
+                filename = add_suffix(file, f"-wbstata")
                 return filename
 
 
@@ -366,23 +365,23 @@ def wbstata(
         click.echo(
             "\nFile suffix for saving the output file(s).\n"
             "(For example, the suffix ''-old'' means that auto.dta will be converted and\n"
-            f"saved as auto-old.dta. Default is to use ''-v{target_version}''.)"
+            f"saved as auto-old.dta. Default is to use ''-wbstata''.)"
         )
         suffix = click.prompt(
             "> File suffix for saving",
             type=str,
-            default=f"-v{target_version}",
+            default=f"-wbstata",
         )
     if PROMPT and (len(files) == 1):
         filename_no_extension = files[0].split(".dta")[0]
         click.echo(
-            f"\nFile name for saving. Default is to save using the ''-v{target_version}'' suffix. For"
-            f"example, ''auto.dta'' will be converted and saved as auto-v{target_version}.dta."
+            f"\nFile name for saving. Default is to save using the ''-wbstata'' suffix. For"
+            f"example, ''auto.dta'' will be converted and saved as auto-wbstata.dta."
         )
         output = click.prompt(
             "> Save file as",
             type=str,
-            default=f"{filename_no_extension}-v{target_version}.dta",
+            default=f"{filename_no_extension}-wbstata.dta",
         )
     else:
         output = None
