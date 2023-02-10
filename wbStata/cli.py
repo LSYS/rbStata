@@ -4,10 +4,10 @@ from glob import glob
 from pathlib import Path
 from typing import Optional, Sequence
 
-# import click
+import click
 import pandas as pd
 from anyascii import anyascii
-# from click import ClickException
+from click import ClickException
 
 
 def normalize_filename(filename: str) -> str:
@@ -336,32 +336,62 @@ def wbstata(
     if (len(files) == 0) and (not all):
         PROMPT = True
         click.echo(
-            "-------------------------------------------------------------"
-        )
-        click.echo("Welcome to the wbStata quickstart command-line utility.\n")
-        click.echo("You will be prompted for relevant settings.\n")
-        click.echo("Please enter values under the following settings.")
-        click.echo("(just press Enter to accept the default value in brackets)")
-        click.echo(
+            "-------------------------------------------------------------\n"
+            "Welcome to the wbStata quickstart command-line utility.\n\n"
+            "You will be prompted for relevant settings.\n\n"
+            "Please enter values under the following settings.\n"
+            "(just press Enter to accept the default value in brackets)\n"
             "-------------------------------------------------------------\n"
         )
+        # Prompt for dta file to convert
         click.echo(
-            "Enter the dta file(s) you want to convert (e.g. ''auto.dta''). It is not"
+            "Enter the dta file(s) you want to convert (e.g. ''auto.dta'').\n"
+            "(It is not necessary to key in the .dta extension (e.g., just type ''auto'').\n"
+            "Press Enter to include all .dta files in the current directory.)"
         )
-        click.echo(
-            "necessary to key in the .dta extension (e.g. just type ''auto''). Press"
-        )
-        click.echo("Enter to include all .dta files in the current directory.")
         _files = click.prompt("> .dta file(s)", type=str, default="*")
     else:
         PROMPT = False
 
+    # Prompt for target vresion
+    if target_version is None:
+        click.echo(
+            "\nThe Stata version to convert to."
+        )
+        target_version = click.prompt("> Target version", type=int, default=13)
+
+
+    # Prompt for suffix to save with
+    if PROMPT and (suffix is None) and (len(files) != 1):
+        click.echo(
+            "\nFile suffix for saving the output file(s).\n"
+            "(For example, the suffix ''-old'' means that auto.dta will be converted and\n"
+            f"saved as auto-old.dta. Default is to use ''-v{target_version}''.)"
+        )
+        suffix = click.prompt(
+            "> File suffix for saving",
+            type=str,
+            default=f"-v{target_version}",
+        )
+    if PROMPT and (len(files) == 1):
+        filename_no_extension = files[0].split(".dta")[0]
+        click.echo(
+            f"\nFile name for saving. Default is to save using the ''-v{target_version}'' suffix. For"
+            f"example, ''auto.dta'' will be converted and saved as auto-v{target_version}.dta."
+        )
+        output = click.prompt(
+            "> Save file as",
+            type=str,
+            default=f"{filename_no_extension}-v{target_version}.dta",
+        )
+    else:
+        output = None
+
+    # Prompt for whether to glob dta files in subdirectories
     if PROMPT and (_files == "*"):
         click.echo(
-            "\nInclude all .dta files in current directory and its subdirectories. Default"
-        )
-        click.echo(
-            "is to include only the .dta files in the current directory."
+            "\nInclude all .dta files in current directory and its subdirectories.\n"
+            "(Default is to include only the .dta files in the current directory.)"
         )
         recursive = click.prompt(
             "> Include subdirectories (y/n)",
@@ -378,50 +408,11 @@ def wbstata(
     elif all:
         files = glob_dta_files(recursive=recursive)
 
-    # Prompt outstanding settings
-    if target_version is None:
-        click.echo(
-            "\nThe Stata version do you want to convert to. This is equivalently the"
-        )
-        click.echo("version of Stata you have.")
-        target_version = click.prompt("> Target version", type=int, default=13)
-
-    if PROMPT and (suffix is None) and (len(files) != 1):
-        click.echo(
-            "\nFile suffix for saving the output file(s). For example, the suffix ''-old''"
-        )
-        click.echo(
-            "means that auto.dta will be converted and saved as auto-old.dta. Default"
-        )
-        click.echo(f"is to use ''-v{target_version}''.")
-        suffix = click.prompt(
-            "> File suffix for saving",
-            type=str,
-            default=f"-v{target_version}",
-        )
-    if PROMPT and (len(files) == 1):
-        filename_no_extension = files[0].split(".dta")[0]
-        click.echo(
-            f"\nFile name for saving. Default is to save using the ''-v{target_version}'' suffix. For"
-        )
-        click.echo(
-            f"example, ''auto.dta'' will be converted and saved as auto-v{target_version}.dta."
-        )
-        output = click.prompt(
-            "> Save file as",
-            type=str,
-            default=f"{filename_no_extension}-v{target_version}.dta",
-        )
-    else:
-        output = None
-
+    # Prompt for whether to be verbose about messages
     if PROMPT:
-        click.echo("\nPrint all messages.")
         verbose = click.prompt(
-            "> Print messages (y/n)", type=click.BOOL, default="y"
+            "\n> Print all messages (y/n)", type=click.BOOL, default="y"
         )
-
-    click.echo("")
     if verbose:
         click.echo(f"+ dta files entered: {files}")
 
@@ -434,6 +425,7 @@ def wbstata(
     OVERWRITE_WARNING = (
         "+ Warning: you are writing over original input dta file."
     )
+    # Conversion for a single file
     if len(files) == 1:
         filename = files[0]
         assert is_dta_file(filename)
@@ -457,6 +449,7 @@ def wbstata(
             if verbose:
                 click.secho("+ Converted: ", fg="green", bold=True, nl=False)
                 click.echo(f"{filename} to {out} in version {target_version}.")
+    # Conversion for batch of files
     else:
         for file in files:
             try:
