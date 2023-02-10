@@ -4,7 +4,7 @@
 test: ## Run tests with pytest and coverage
 	@echo "+ $@"
 	@echo "+ doctest"
-	pytohn -m doctest wbstata/*
+	python -m doctest wbstata/*
 	@echo "+ pytest + coverage"
 	-mkdir temp
 	coverage erase
