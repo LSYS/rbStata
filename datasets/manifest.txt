@@ -1,0 +1,15 @@
+auto 
+auto2 
+bplong 
+cancer 
+census 
+citytemp 
+educ99gdp 
+gnp96 
+lifeexp
+nlsw88 
+pop2000 
+sp500 
+uslifeexp 
+uslifeexp2 
+voter
