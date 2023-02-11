@@ -16,7 +16,7 @@ def normalize_filename(filename: str) -> str:
     Parameters
     ----------
     filename: str
-    
+
     Examples
     --------
     >>> normalize_filename("File.dta ")
@@ -105,7 +105,7 @@ def convert_dta(input: str, output: str, target_version: int) -> None:
         Output (destination) dta file after conversion.
     target_version: int
         Stata version to convert to.
-    
+
     Example
     -------
     >>> convert_dta("datasets/auto.dta", "datasets/doctest-out.dta", 13)
@@ -130,15 +130,14 @@ def convert_dta(input: str, output: str, target_version: int) -> None:
     data_label = reader_obj.data_label
     variable_labels = reader_obj.variable_labels()
 
-    std_opts_tostata = dict(version=version, write_index=False,
+    std_opts_tostata = dict(
+        version=version,
+        write_index=False,
         data_label=data_label,
-            variable_labels=variable_labels, 
-            )
+        variable_labels=variable_labels,
+    )
     try:
-        pd.read_stata(input).to_stata(
-            output, 
-            **std_opts_tostata
-        )
+        pd.read_stata(input).to_stata(output, **std_opts_tostata)
     except UnicodeEncodeError:
         df = pd.read_stata(input)
         for col in df.columns:
@@ -146,9 +145,7 @@ def convert_dta(input: str, output: str, target_version: int) -> None:
                 df[col] = df[col].apply(lambda x: anyascii(x))
             except TypeError:
                 pass
-        df.to_stata(output, 
-            **std_opts_tostata
-            )
+        df.to_stata(output, **std_opts_tostata)
 
 
 def add_suffix(filename: str, suffix: str) -> str:
@@ -251,8 +248,8 @@ def glob_dta_files(recursive: bool) -> list:
 
 
 CONTEXT_SETTINGS = dict(
-    help_option_names= ("-h", "--help"),
-    max_content_width= 90,
+    help_option_names=("-h", "--help"),
+    max_content_width=90,
 )
 
 
@@ -330,7 +327,7 @@ def wbstata(
     suffix: str
         (Optional) Suffix string to be added to filename.
     output: str
-        (Optional) Filename for output. If None, use suffix to create output name.           
+        (Optional) Filename for output. If None, use suffix to create output name.
     all: bool
         If True, glob the dta files in path. Default is False.
     overwrite: bool
@@ -339,7 +336,7 @@ def wbstata(
         If True, glob dta files in subdirectories. Default is False.
     verbose: bool
         If True, print messages to stdout. Default is False.
-        
+
     Returns
     -------
     None
@@ -366,11 +363,8 @@ def wbstata(
 
     # Prompt for target vresion
     if target_version is None:
-        click.echo(
-            "\nThe Stata version to convert to."
-        )
+        click.echo("\nThe Stata version to convert to.")
         target_version = click.prompt("> Target version", type=int, default=13)
-
 
     # Prompt for suffix to save with
     if PROMPT and (suffix is None) and (len(files) != 1):
@@ -461,7 +455,9 @@ def wbstata(
                 click.echo(f"{filename} to {out} in version {target_version}.")
     # Conversion for batch of files
     else:
-        with click.progressbar(files, label="label", length=len(files)) as pb_files:
+        with click.progressbar(
+            files, label="Converting", length=len(files)
+        ) as pb_files:
             for file in pb_files:
                 try:
                     is_dta_file(file)
@@ -490,11 +486,11 @@ def wbstata(
                         suffix=suffix,
                     )
                     convert_dta(file, out, target_version)
-                    if verbose:
-                        click.secho(
-                            "+ Converted: ", fg="green", bold=True, nl=False
-                        )
-                        click.echo(f"{file} to {out} in version {target_version}.")
+                    # if False:
+                    #     click.secho(
+                    #         "+ Converted: ", fg="green", bold=True, nl=False
+                    #     )
+                    #     click.echo(f"{file} to {out} in version {target_version}.")
 
     if verbose:
         if len(files) > 0:
