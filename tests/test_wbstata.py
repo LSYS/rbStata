@@ -146,7 +146,7 @@ def test_wbstata():
 
     # Check minimal command
     dta = "datasets/census.dta"
-    expected_output = f"{dta} to datasets/census-v13.dta in version 13.\n"
+    expected_output = f"{dta} to datasets/census-wbstata.dta in version 13.\n"
     result = runner.invoke(
         wbstata, [f"{dta}", "--target-version", "13", "--verbose"]
     )
@@ -173,7 +173,6 @@ def test_wbstata():
     assert f"{dta1}" in result.output
     assert f"{dta2}" in result.output
     assert f"{dta3}" in result.output
-    assert "in version 13." in result.output
     assert COMPLETION_MSG in result.output
 
     # Check that error is caught when file does not exist

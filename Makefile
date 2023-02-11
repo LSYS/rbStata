@@ -3,13 +3,13 @@
 .PHONY: test
 test: ## Run tests with pytest and coverage
 	@echo "+ $@"
-	@echo "+ doctest"
-	python -m doctest wbstata/*
 	@echo "+ pytest + coverage"
 	-mkdir temp
 	coverage erase
 	coverage run -m pytest -v
 	coverage report -m
+	@echo "+ doctest"
+	python -m doctest wbstata/*	
 	@rm -rf temp
 	make clean-dta
 
