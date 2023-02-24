@@ -1,5 +1,6 @@
 """Main user-facing function."""
 import re
+import warnings
 from glob import glob
 from pathlib import Path
 from typing import Optional, Sequence
@@ -8,6 +9,8 @@ import click
 import pandas as pd
 from anyascii import anyascii
 from click import ClickException
+
+warnings.simplefilter(action="ignore", category=Warning)
 
 
 def normalize_filename(filename: str) -> str:
@@ -130,12 +133,18 @@ def convert_dta(input: str, output: str, target_version: int) -> None:
     data_label = reader_obj.data_label
     variable_labels = reader_obj.variable_labels()
 
+    # Variable labels must be 80 chars or fewer
+    for key, val in variable_labels.items():
+        if len(val) >= 80:
+            variable_labels[key] = val[:80]
+
     std_opts_tostata = dict(
         version=version,
         write_index=False,
         data_label=data_label,
         variable_labels=variable_labels,
     )
+
     try:
         pd.read_stata(input).to_stata(output, **std_opts_tostata)
     except UnicodeEncodeError:
