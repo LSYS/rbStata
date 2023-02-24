@@ -60,30 +60,25 @@ def test_get_output_name():
 
     # Overwriting
     expected = file
-    result = get_output_name(file, target_version=13, overwrite=True)
+    result = get_output_name(file, overwrite=True)
     assert result == expected
 
     # Using output option
     output = "output.dta"
     expected = output
-    result = get_output_name(
-        file, target_version=13, overwrite=False, output=output
-    )
+    result = get_output_name(file, overwrite=False, output=output)
     assert result == expected
 
     # Using suffix
     suffix = "-v13"
     expected = add_suffix(file, suffix)
-    result = get_output_name(
-        file, target_version=13, overwrite=False, suffix=suffix
-    )
+    result = get_output_name(file, overwrite=False, suffix=suffix)
     assert result == expected
 
     # Using default
-    version = 13
-    suffix = "-v13"
+    suffix = "-wbstata"
     expected = add_suffix(file, suffix)
-    result = get_output_name(file, target_version=version, overwrite=False)
+    result = get_output_name(file, overwrite=False)
     assert result == expected
 
 
