@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install black pyflakes mypy pydocstyle
+          pip install black pyflakes mypy pydocstyle isort
       - name: Check black formatter and pyflakes
         run: |
           make lint
