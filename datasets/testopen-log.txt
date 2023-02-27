@@ -1,8 +1,8 @@
 --------------------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  D:\wbStata\datasets\opentest-log.txt
+       log:  D:\wbStata\datasets\testopen-log.txt
   log type:  text
- opened on:  11 Feb 2023, 16:06:41
+ opened on:  27 Feb 2023, 10:50:36
 
 . version 13
 
@@ -18,37 +18,14 @@ auto auto2 bplong cancer census citytemp educ99gdp gnp96 lifeexp nlsw88 pop2000 
 . 
 . * Should fail to open in Stata 13
 . foreach data of local datasets {
-  2.         cap use `rootdir'/`data'.dta
+  2.         cap use `rootdir'/`data'.dta, clear
   3.         assert _rc==610
   4. }
 
 . 
-. * Should open in Stata 13
-. foreach data of local datasets {
-  2.         cap use `rootdir'/wbstata/`data'-wbstata.dta
-  3.         dis _rc
-  4.         assert _rc==0
-  5. }
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-
-. 
 . log close
       name:  <unnamed>
-       log:  D:\wbStata\datasets\opentest-log.txt
+       log:  D:\wbStata\datasets\testopen-log.txt
   log type:  text
- closed on:  11 Feb 2023, 16:06:41
+ closed on:  27 Feb 2023, 10:50:36
 --------------------------------------------------------------------------------------------

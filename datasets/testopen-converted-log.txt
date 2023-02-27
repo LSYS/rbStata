@@ -1,0 +1,41 @@
+--------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  D:\wbStata\datasets\testopen-converted-log.txt
+  log type:  text
+ opened on:  27 Feb 2023, 10:50:38
+
+. version 13
+
+. 
+. txt2macro manifest.txt
+
+. local datasets `r(mymacro)'
+
+. dis "`datasets'"
+auto auto2 bplong cancer census citytemp educ99gdp gnp96 lifeexp nlsw88 pop2000 sp500 uslife
+> exp uslifeexp2 voter
+
+. 
+. foreach data of local datasets {
+  2.         local converted_datasets `converted_datasets' `data'-wbstata
+  3. }
+
+. dis "`converted_datasets'"
+auto-wbstata auto2-wbstata bplong-wbstata cancer-wbstata census-wbstata citytemp-wbstata edu
+> c99gdp-wbstata gnp96-wbstata lifeexp-wbstata nlsw88-wbstata pop2000-wbstata sp500-wbstata 
+> uslifeexp-wbstata uslifeexp2-wbstata voter-wbstata
+
+. 
+. * Should open in Stata 13
+. foreach data of local converted_datasets {
+  2.         cap use `rootdir'/`data'.dta, clear
+  3.         assert _rc==0
+  4. }
+
+. 
+. log close
+      name:  <unnamed>
+       log:  D:\wbStata\datasets\testopen-converted-log.txt
+  log type:  text
+ closed on:  27 Feb 2023, 10:50:38
+--------------------------------------------------------------------------------------------
