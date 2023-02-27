@@ -5,11 +5,6 @@ EXECSTATA := $(STATA_PATH) -e do
 DTA_ORIGIN := $(wildcard *.dta)
 TESTOPEN_LOG := opentest-log.txt
 
-.PHONY: getnick
-getnick:
-	wget -np -A ".dta" -np -nd -P out "https://github.com/NickCH-K/causaldata/tree/main/Stata/"
-
-
 .PHONY: getdata
 getdata: # Download all data
 getdata: getdata.do manifest.txt txt2macro.ado
