@@ -14,7 +14,7 @@ warnings.simplefilter(action="ignore", category=Warning)
 
 
 def normalize_filename(filename: str) -> str:
-    """Normalize filenames by removing whitespaces and lower casing.
+    """Normalize filenames by removing whitespaces.
 
     Parameters
     ----------
@@ -22,8 +22,10 @@ def normalize_filename(filename: str) -> str:
 
     Examples
     --------
-    >>> normalize_filename("File.dta ")
-    'file.dta'
+    >>> normalize_filename("File.dta")
+    'File.dta'
+    >>> normalize_filename("     File.dta     ")
+    'File.dta'
 
     Returns
     -------
@@ -32,7 +34,6 @@ def normalize_filename(filename: str) -> str:
     # Remove extra whitespaces
     re_extra_whitespaces = re.compile(r"\s+")
     filename = re_extra_whitespaces.sub("", filename).strip()
-    filename = filename.lower()
     return filename
 
 

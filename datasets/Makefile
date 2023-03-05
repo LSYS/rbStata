@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-STATA_PATH="C:\Program Files (x86)\Stata13\StataMP-64"
+STATA_PATH := "C:\Program Files (x86)\Stata13\StataMP-64"
 EXECSTATA := $(STATA_PATH) -e do
 DTA_ORIGIN := $(wildcard *.dta)
 TESTOPEN_LOG := opentest-log.txt

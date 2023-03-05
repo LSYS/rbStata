@@ -4,15 +4,16 @@
 test: ## Run tests with pytest and coverage
 	@echo "+ $@"
 	@echo "+ doctest"
-	python -m doctest wbstata/cli.py --verbose	
+	python -m doctest wbStata/cli.py --verbose	
 	@echo "+ pytest + coverage"
 	-mkdir temp
 	coverage erase
 	coverage run -m pytest -v
 	coverage report -m
-
 	@rm -rf temp
 	make clean-dta
+	# Git checkout census.dta
+	git checkout datasets/census.dta
 
 .PHONY: lint
 MYPY_OPTS := --ignore-missing-imports

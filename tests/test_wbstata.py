@@ -37,7 +37,7 @@ def test_normalize_dta_filename():
 
 
 def test_normalize_filename():
-    expected = "census.dta"
+    expected = "Census.dta"
     result = normalize_filename("Census.dta")
     assert expected == result
 
