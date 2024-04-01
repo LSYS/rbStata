@@ -13,7 +13,7 @@ test: ## Run tests with pytest and coverage
 	@rm -rf temp
 	make clean-dta
 	# Git checkout census.dta
-	git checkout datasets/census.dta
+	git checkout assets/datasets/census.dta
 
 .PHONY: lint
 MYPY_OPTS := --ignore-missing-imports

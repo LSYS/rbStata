@@ -14,6 +14,8 @@ from wbStata.cli import (
 )
 
 
+DATAPATH = "assets/datasets"
+
 def test_normalize_dta_filename():
     expected = "census.dta"
 
@@ -25,13 +27,13 @@ def test_normalize_dta_filename():
     result = normalize_dta_filename(filename)
     assert result == expected
 
-    expected = "datasets/census.dta"
+    expected = f"{DATAPATH}/census.dta"
 
-    filename = "datasets/census"
+    filename = f"{DATAPATH}/census"
     result = normalize_dta_filename(filename)
     assert result == expected
 
-    filename = "datasets/census.dta"
+    filename = f"{DATAPATH}/census.dta"
     result = normalize_dta_filename(filename)
     assert result == expected
 
@@ -56,7 +58,7 @@ def test_add_suffix():
 
 
 def test_get_output_name():
-    file = "census.dta"
+    file = f"{DATAPATH}/census.dta"
 
     # Overwriting
     expected = file
@@ -83,7 +85,7 @@ def test_get_output_name():
 
 
 def test_is_dta_file():
-    valid_file = "datasets/census.dta"
+    valid_file = f"{DATAPATH}/census.dta"
     is_dta_file(valid_file)
 
     invalid_file = "wrongfile.dta"
@@ -108,8 +110,8 @@ def test_glob_dta_files():
 def test_convert_dta():
     for version in range(10, 17 + 1):
         convert_dta(
-            "datasets/census.dta",
-            "datasets/test-output.dta",
+            f"{DATAPATH}/census.dta",
+            f"{DATAPATH}/test-output.dta",
             target_version=version,
         )
 
@@ -135,13 +137,13 @@ def test_wbstata():
     )
 
     # Check that prompt works with just file (prompt for version)
-    result = runner.invoke(wbstata, ["datasets/census.dta"])
+    result = runner.invoke(wbstata, [f"{DATAPATH}/census.dta"])
     assert result.exit_code == 0
     assert "> Target version" in result.output
 
     # Check minimal command
-    dta = "datasets/census.dta"
-    expected_output = f"{dta} to datasets/census-wbstata.dta in version 13.\n"
+    dta = f"{DATAPATH}/census.dta"
+    expected_output = f"{dta} to {DATAPATH}/census-wbstata.dta in version 13.\n"
     result = runner.invoke(
         wbstata, [f"{dta}", "--target-version", "13", "--verbose"]
     )
@@ -150,9 +152,9 @@ def test_wbstata():
     assert COMPLETION_MSG in result.output
 
     # Check multiple
-    dta1 = "datasets/census.dta"
-    dta2 = "datasets/auto.dta"
-    dta3 = "datasets/lifeexp.dta"
+    dta1 = f"{DATAPATH}/census.dta"
+    dta2 = f"{DATAPATH}/auto.dta"
+    dta3 = f"{DATAPATH}/lifeexp.dta"
     result = runner.invoke(
         wbstata,
         [
