@@ -2,7 +2,8 @@ import pytest
 from click import ClickException
 from click.testing import CliRunner
 
-from wbStata.cli import (
+from wbStata.cli import wbstata
+from wbStata.helpers import (
     add_suffix,
     convert_dta,
     get_output_name,
@@ -10,11 +11,10 @@ from wbStata.cli import (
     is_dta_file,
     normalize_dta_filename,
     normalize_filename,
-    wbstata,
 )
 
-
 DATAPATH = "assets/datasets"
+
 
 def test_normalize_dta_filename():
     expected = "census.dta"
