@@ -82,7 +82,7 @@ clean: ## Remove artifacts
 clean: clean-test clean-ipynb clean-mypy clean-pyc clean-build clean-dta
 
 .PHONY: build
-build: clean ## Prepare packaging for PyPi
+build: clean test lint ## Prepare packaging for PyPi
 	@echo "+ $@"
 	@rm -rf dist/ wbStata.egg-info/
 	@python setup.py sdist
