@@ -1,7 +1,5 @@
 # wbStata
 
-www.knownfail.org
-
 `wbStata` is a CLI utility to easily convert between (or, go way back to) versions of Stata's `.dta`, which are not forward compatible. 
 * Cross-platform CLI utility: Windows, Mac, Linux.
 * No knowledge of Python required (but requires a Python installation).
@@ -72,7 +70,8 @@ Find your way back to older versions of Stata `.dta` files with `wbStata`.
   * [[3]](https://www.statalist.org/forums/forum/general-stata-discussion/general/1326849-how-to-open-stata-14-files-in-stata-12-13) How to open stata 14 files in Stata 12-13.
   * [[4]](https://www.statalist.org/forums/forum/general-stata-discussion/general/1373797-how-to-open-a-new-stata-dataset-version) How to open a new stata dataset version.
   * [[5]](https://www.statalist.org/forums/forum/general-stata-discussion/general/1363089-how-to-open-a-file-that-is-more-from-a-more-recent-version-of-stata-into-stata13) How to open a file that is more from a more recent version of Stata into Stata13.
-  * [[6]](https://www.reddit.com/r/stata/comments/4ufos2/convert_stata_14_dta_file_t) Convert Stata 14 .dta file to Stata 13.
+  <!-- Deadlink -->
+  <!-- * [[6]](https://www.reddit.com/r/stata/comments/4ufos2/convert_stata_14_dta_file_t) Convert Stata 14 .dta file to Stata 13. -->
 </details>  
 
 ## Alternative solutions
