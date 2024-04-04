@@ -169,8 +169,8 @@ def add_suffix(filename: str, suffix: str) -> str:
 
     Examples
     --------
-    >>> add_suffix("filename.dta", "-wbstata")
-    'filename-wbstata.dta'
+    >>> add_suffix("filename.dta", "-rbstata")
+    'filename-rbstata.dta'
 
     >>> add_suffix("filename.dta", "")
     'filename.dta'
@@ -215,7 +215,7 @@ def get_output_name(
     >>> get_output_name("input.dta", False, output="output.dta")
     'output.dta'
     >>> get_output_name("input.dta", False, output=None)
-    'input-wbstata.dta'
+    'input-rbstata.dta'
 
     Returns
     -------
@@ -232,7 +232,7 @@ def get_output_name(
                 filename = add_suffix(file, suffix)
                 return filename
             else:
-                filename = add_suffix(file, "-wbstata")
+                filename = add_suffix(file, "-rbstata")
                 return filename
 
 

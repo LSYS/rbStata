@@ -2,8 +2,8 @@ import pytest
 from click import ClickException
 from click.testing import CliRunner
 
-from wbStata.cli import wbstata
-from wbStata.helpers import (
+from rbStata.cli import rbstata
+from rbStata.helpers import (
     add_suffix,
     convert_dta,
     get_output_name,
@@ -78,7 +78,7 @@ def test_get_output_name():
     assert result == expected
 
     # Using default
-    suffix = "-wbstata"
+    suffix = "-rbstata"
     expected = add_suffix(file, suffix)
     result = get_output_name(file, overwrite=False)
     assert result == expected
@@ -116,17 +116,17 @@ def test_convert_dta():
         )
 
 
-def test_wbstata():
+def test_rbstata():
     runner = CliRunner()
 
     COMPLETION_MSG = "Conversions complete."
 
     # Check that prompt works
-    result = runner.invoke(wbstata)
+    result = runner.invoke(rbstata)
     assert result.exit_code == 0
     assert "> .dta file(s)" in result.output
     assert (
-        "Welcome to the wbStata quickstart command-line utility."
+        "Welcome to the rbStata quickstart command-line utility."
         in result.output
     )
     assert "You will be prompted for relevant settings." in result.output
@@ -137,15 +137,15 @@ def test_wbstata():
     )
 
     # Check that prompt works with just file (prompt for version)
-    result = runner.invoke(wbstata, [f"{DATAPATH}/census.dta"])
+    result = runner.invoke(rbstata, [f"{DATAPATH}/census.dta"])
     assert result.exit_code == 0
     assert "> Target version" in result.output
 
     # Check minimal command
     dta = f"{DATAPATH}/census.dta"
-    expected_output = f"{dta} to {DATAPATH}/census-wbstata.dta in version 13.\n"
+    expected_output = f"{dta} to {DATAPATH}/census-rbstata.dta in version 13.\n"
     result = runner.invoke(
-        wbstata, [f"{dta}", "--target-version", "13", "--verbose"]
+        rbstata, [f"{dta}", "--target-version", "13", "--verbose"]
     )
     assert result.exit_code == 0
     assert expected_output in result.output
@@ -156,7 +156,7 @@ def test_wbstata():
     dta2 = f"{DATAPATH}/auto.dta"
     dta3 = f"{DATAPATH}/lifeexp.dta"
     result = runner.invoke(
-        wbstata,
+        rbstata,
         [
             f"{dta1}",
             f"{dta2}",
@@ -175,7 +175,7 @@ def test_wbstata():
     # Check that error is caught when file does not exist
     invalid_file = "dummy.dta"
     result = runner.invoke(
-        wbstata, [f"{invalid_file}", "--target-version", "13", "--verbose"]
+        rbstata, [f"{invalid_file}", "--target-version", "13", "--verbose"]
     )
     assert result.exit_code != 0
     assert (
@@ -185,7 +185,7 @@ def test_wbstata():
 
     # Check that error is caught one if the files does not exist
     result = runner.invoke(
-        wbstata,
+        rbstata,
         [f"{dta1}", f"{invalid_file}", "--target-version", "13", "--verbose"],
     )
     assert result.exit_code == 0
@@ -199,7 +199,7 @@ def test_wbstata():
     # Warning should be present without verbose option
     OVERWRITE_WARNING = "Warning: you are writing over original input dta file."
     result = runner.invoke(
-        wbstata, [f"{dta1}", "--target-version", "17", "--overwrite"]
+        rbstata, [f"{dta1}", "--target-version", "17", "--overwrite"]
     )
     assert result.exit_code == 0
     assert OVERWRITE_WARNING in result.output
@@ -207,7 +207,7 @@ def test_wbstata():
     # Check that overwrite works with verbose
     _ver = 17
     result = runner.invoke(
-        wbstata,
+        rbstata,
         [f"{dta1}", "--target-version", f"{_ver}", "--overwrite", "--verbose"],
     )
     assert result.exit_code == 0
@@ -217,7 +217,7 @@ def test_wbstata():
     # Check that overwrite works for multiple files work
     OVERWRITE_WARNING = "Warning: you are writing over original input dta file."
     result = runner.invoke(
-        wbstata,
+        rbstata,
         [f"{dta1}", f"{dta2}" "--version", "17", "--overwrite", "--verbose"],
     )
     assert result.exit_code == 0
@@ -226,13 +226,13 @@ def test_wbstata():
 
     # Check that using suffixes work
     result = runner.invoke(
-        wbstata, [f"{dta1}", "--target-version", "13", "--suffix", "-suffix"]
+        rbstata, [f"{dta1}", "--target-version", "13", "--suffix", "-suffix"]
     )
     assert result.exit_code == 0
 
     # Check that messages are correct if no valid dta files are found
     result = runner.invoke(
-        wbstata, ["--all", "--target-version", "13", "--verbose"]
+        rbstata, ["--all", "--target-version", "13", "--verbose"]
     )
     assert result.exit_code == 0
     assert "dta files entered:" in result.output
@@ -241,7 +241,7 @@ def test_wbstata():
 
     # Check that messages are correct with recursion
     result = runner.invoke(
-        wbstata, ["--all", "--target-version", "13", "--verbose", "--recursive"]
+        rbstata, ["--all", "--target-version", "13", "--verbose", "--recursive"]
     )
     assert result.exit_code == 0
     assert "dta files entered:" in result.output

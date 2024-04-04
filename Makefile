@@ -4,7 +4,7 @@
 test: ## Run tests with pytest and coverage
 	@echo "+ $@"
 	@echo "+ doctest"
-	python -m doctest wbStata/cli.py --verbose	
+	python -m doctest rbStata/cli.py --verbose	
 	@echo "+ pytest + coverage"
 	-mkdir temp
 	coverage erase
@@ -21,18 +21,18 @@ BLACK_OPTS := --line-length 80
 lint: ## Check with mypy, pyflakes, black
 	@echo "+ $@"
 	@echo "+ pyflakes"
-	python -m pyflakes wbStata/*.py
+	python -m pyflakes rbStata/*.py
 	python -m pyflakes tests/*.py
 	python -m pyflakes setup.py
 	@echo "+ Static typing"
-	mypy wbStata/*.py $(MYPY_OPTS)
+	mypy rbStata/*.py $(MYPY_OPTS)
 	@echo "+ docstrings"
 	pydocstyle --convention numpy
 	@echo "+ imports"
 	isort .
 	@echo "+ Black"
 	black setup.py $(BLACK_OPTS)
-	black wbStata/*.py $(BLACK_OPTS)
+	black rbStata/*.py $(BLACK_OPTS)
 	black tests/*.py $(BLACK_OPTS)
 
 .PHONY: clean-dta
@@ -84,7 +84,7 @@ clean: clean-test clean-ipynb clean-mypy clean-pyc clean-build clean-dta
 .PHONY: build
 build: clean test lint ## Prepare packaging for PyPi
 	@echo "+ $@"
-	@rm -rf dist/ wbStata.egg-info/
+	@rm -rf dist/ rbStata.egg-info/
 	@python setup.py sdist
 	twine check dist/*
 
@@ -98,7 +98,7 @@ setup: ## Set up dependencies
 devtest: ## Install dev and test in editable mode
 	@echo "+ $@"
 	pip install -e .
-	wbstata
+	rbstata
 
 .PHONY: help
 help: ## Show this help message and exit

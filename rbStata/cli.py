@@ -5,7 +5,7 @@ from typing import Optional, Sequence
 import click
 from click import ClickException
 
-from wbStata.helpers import (
+from rbStata.helpers import (
     convert_dta,
     get_output_name,
     glob_dta_files,
@@ -73,7 +73,7 @@ CONTEXT_SETTINGS = dict(
 @click.option(
     "-v", "--verbose", help="Print messages.", is_flag=True, flag_value=True
 )
-def wbstata(
+def rbstata(
     files: Sequence[str],
     target_version: Optional[int],
     suffix: Optional[str],
@@ -115,7 +115,7 @@ def wbstata(
         PROMPT = True
         click.echo(
             "-------------------------------------------------------------\n"
-            "Welcome to the wbStata quickstart command-line utility.\n\n"
+            "Welcome to the rbStata quickstart command-line utility.\n\n"
             "You will be prompted for relevant settings.\n\n"
             "Please enter values under the following settings.\n"
             "(just press Enter to accept the default value in brackets)\n"
@@ -141,23 +141,23 @@ def wbstata(
         click.echo(
             "\nFile suffix for saving the output file(s).\n"
             "(For example, the suffix ''-old'' means that auto.dta will be converted and\n"
-            "saved as auto-old.dta. Default is to use ''-wbstata''.)"
+            "saved as auto-old.dta. Default is to use ''-rbstata''.)"
         )
         suffix = click.prompt(
             "> File suffix for saving",
             type=str,
-            default="-wbstata",
+            default="-rbstata",
         )
     if PROMPT and (len(files) == 1):
         filename_no_extension = files[0].split(".dta")[0]
         click.echo(
-            "\nFile name for saving. Default is to save using the ''-wbstata'' suffix. For"
-            "example, ''auto.dta'' will be converted and saved as auto-wbstata.dta."
+            "\nFile name for saving. Default is to save using the ''-rbstata'' suffix. For"
+            "example, ''auto.dta'' will be converted and saved as auto-rbstata.dta."
         )
         output = click.prompt(
             "> Save file as",
             type=str,
-            default=f"{filename_no_extension}-wbstata.dta",
+            default=f"{filename_no_extension}-rbstata.dta",
         )
     else:
         output = None
