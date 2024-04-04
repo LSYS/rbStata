@@ -1,13 +1,14 @@
-# wbStata
+# rbStata
 
-`wbStata` is a CLI utility to easily convert between (or, go way back to) versions of Stata's `.dta`, which are not forward compatible. 
+`rbStata` is a CLI utility to easily convert between (or, go way back to) versions of Stata's `.dta`, which are not forward compatible. 
 * Cross-platform CLI utility: Windows, Mac, Linux.
 * No knowledge of Python required (but requires a Python installation).
-* ? Takes care of Unicode to ASCII transliteration (older versions of Stata do not support Unicode)
+* Handles Unicode to ASCII transliteration (older versions of Stata do not support Unicode).
 * Works with Python 3.6+.
-* ?Takes care of variable label transferring
-* ?Takes care of data label transferring
-* ?Takes care of value labels
+* Handles transferring (where available and possible) of:
+  - Variable labels
+  - Data labels
+  - Value labels
 
 ## Statement of Need
 
@@ -16,30 +17,30 @@ This means you cannot use older versions (e.g., `Stata 13`) to read a `.dta` fil
 
 So what is one to do when you try to open a `dta` file in Stata and get a rude `dta too modern r(601)` error:
 <details open><summary><em>...</em></summary>
-  <p align="center"><img width="100%" src="./assets/gfy-error.png"></p>
+  <p align="center"><img width="100%" src="https://raw.githubusercontent.com/LSYS/rbStata/main/assets/gfy-error.png"></p>
 </details>
 
-Find your way back to older versions of Stata `.dta` files with `wbStata`.
-`wbStata` is a quick and dead simple CLI (command-line interface) to go way back with Stata data (`.dta`) files. You *do not need access to* newer `Stata` versions.
+Roll back to older versions of Stata `.dta` files with `rbStata`.
+`rbStata` is a quick and dead simple CLI (command-line interface) to go way back with Stata data (`.dta`) files. You *do not need access to* newer `Stata` versions.
 
 
 ## Quick usage
 
 * **Simple single-line command-line usage:**
   * Convert the `auto.dta` file so that you can open it in Stata 13
-    <pre>$ wbstata auto.dta --target-version 13 --verbose</pre>
+    <pre>$ rbstata auto.dta --target-version 13 --verbose</pre>
   
   * Convert all `dta` files in the path so that you can open it in Stata 13
-    <pre>$ wbstata --all --target-version 13 --verbose</pre>
+    <pre>$ rbstata --all --target-version 13 --verbose</pre>
   
 
-* **Let `wbStata` prompt you for relevant settings:** <br>
+* **Let `rbStata` prompt you for relevant settings:** <br>
   
-  Type `wbstata` and enter settings (press enter to accept default settings in brackets):
-  <pre>$ wbstata</pre>
+  Type `rbstata` and enter settings (press enter to accept default settings in brackets):
+  <pre>$ rbstata</pre>
   ```console
   -------------------------------------------------------------
-  Welcome to the wbStata quickstart command-line utility.
+  Welcome to the rbStata quickstart command-line utility.
 
   You will be prompted for relevant settings.
 
@@ -52,17 +53,47 @@ Find your way back to older versions of Stata `.dta` files with `wbStata`.
   Press Enter to include all .dta files in the current directory.)
   > .dta file(s) [*]:
   ...
+
+  The Stata version to convert to.
+> Target version [13]:
+
+  File suffix for saving the output file(s).
+  (For example, the suffix ''-old'' means that auto.dta will be converted and
+  saved as auto-old.dta. Default is to use ''-rbstata''.)
+  > File suffix for saving [-rbstata]:
+
+  Include all .dta files in current directory and its subdirectories.
+  (Default is to include only the .dta files in the current directory.)
+  > Include subdirectories (y/n) [n]:
+
+  > Print all messages (y/n) [y]:
+  ...
   ```
 <details><summary><em>Settings [defaults]</em></summary>
 
   * `.dta file(s)` [*]: .dta files to convert [all .dta files in current directory]
   * `Target version [13]`: version to convert to [Stata v13]  
-  * `File suffix for saving [-wbstata]`: Suffix for saving [E.g. save auto.dta to auto-wbstata.dta]
+  * `File suffix for saving [-rbstata]`: Suffix for saving [E.g. save auto.dta to auto-rbstata.dta]
   * `Include subdirectories (y/n) [n]`: Include subdirectories if * [no]
   * `Print all messages (y/n) [y]`: Print all messages and errors [yes]
 </details>
 
 ## More about the problem
+<details open><summary><em>Assortment of enquires about the error</em></summary>
+  
+  * [[1]](https://www.stata.com/support/faqs/data-management/save-for-previous-version/) Stata support FAQs: How can I save a Stata dataset so that it can be read by a previous version of Stata?
+  * [[2]](https://www.statalist.org/forums/forum/general-stata-discussion/general/1440296-how-to-read-a-stata-15-data-file-in-stata-13) how to read a stata 15 data file in stata 13.
+  * [[3]](https://www.statalist.org/forums/forum/general-stata-discussion/general/1326849-how-to-open-stata-14-files-in-stata-12-13) How to open stata 14 files in Stata 12-13.
+  * [[4]](https://www.statalist.org/forums/forum/general-stata-discussion/general/1373797-how-to-open-a-new-stata-dataset-version) How to open a new stata dataset version.
+  * [[5]](https://www.statalist.org/forums/forum/general-stata-discussion/general/1363089-how-to-open-a-file-that-is-more-from-a-more-recent-version-of-stata-into-stata13) How to open a file that is more from a more recent version of Stata into Stata13.
+  <!-- Deadlink -->
+  <!-- * [[6]](https://www.reddit.com/r/stata/comments/4ufos2/convert_stata_14_dta_file_t) Convert Stata 14 .dta file to Stata 13. -->
+</details>  
+
+## Versions and string handling
+
+One major jump in forward compatibility is from Stata 13 to Stata 14, where Stata 14 started adding Unicode compatibility. `rbStata` handles transferring of the data, value, and variable labels. If Unicode in labels exist and the backward target version is 13, `rbStata` will transliterate Unicode to ASCII *and* truncate labels to 80 characters.
+
 <details open><summary><em>Assortment of enquires about the error</em></summary>
   
   * [[1]](https://www.stata.com/support/faqs/data-management/save-for-previous-version/) Stata support FAQs: How can I save a Stata dataset so that it can be read by a previous version of Stata?
@@ -81,13 +112,13 @@ Based on proposed solutions in [More about the problem](#more-about-the-problem)
 * [[2]](https://cran.r-project.org/web/packages/haven/index.html) R's `Haven`.
 
 ## About this utility
-`WbStata` is an open source utility that wraps around [`click`](https://click.palletsprojects.com/) and [`pandas`](https://github.com/pandas-dev/pandas)'s [`DataFrame.to_Stata`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_stata.html) utility. Using `wbStata`, easily convert new Stata `dta` files to older versions.
+`rbStata` is an open source utility that wraps around [`click`](https://click.palletsprojects.com/) and [`pandas`](https://github.com/pandas-dev/pandas)'s [`DataFrame.to_Stata`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_stata.html) utility. Using `rbStata`, easily convert new Stata `dta` files to older versions.
 
 <details><summary><em>Expose CLI help reference</em></summary>
   
   ```console
-  $ wbstata -h
-  Usage: wbstata [OPTIONS] <dta files>
+  $ rbstata -h
+  Usage: rbstata [OPTIONS] <dta files>
 
     Find your way back to older versions of dta files.
 
