@@ -1,6 +1,6 @@
 # rbStata
 
-`rbStata` is a CLI utility to easily convert between (or, go way back to) versions of Stata's `.dta`, which are not forward compatible. 
+`rbStata` is a CLI utility to easily convert between (or, roll back) versions of Stata's `.dta`, which are not forward compatible. 
 * Cross-platform CLI utility: Windows, Mac, Linux.
 * No knowledge of Python required (but requires a Python installation).
 * Handles Unicode to ASCII transliteration (older versions of Stata do not support Unicode).
