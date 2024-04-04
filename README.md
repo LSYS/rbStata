@@ -10,6 +10,12 @@
   - Data labels
   - Value labels
 
+| | |
+| --- | --- |
+| Package | [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/rbStata?label=Python%203.6%2B&logo=python&logoColor=white)](https://pypi.org/project/rbStata/) |
+| Testing/build | [![Coverage](https://codecov.io/github/lsys/rbStata/coverage.svg?branch=main)](https://codecov.io/gh/lsys/rbStata) [![CI](https://github.com/LSYS/rbStata/actions/workflows/build.yml/badge.svg)](https://github.com/LSYS/rbStata/actions/workflows/build.yml) [![CLI](https://github.com/LSYS/rbStata/actions/workflows/cli-pkg.yml/badge.svg)](https://github.com/LSYS/rbStata/actions/workflows/cli-pkg.yml) [![DocLinks](https://github.com/LSYS/rbStata/actions/workflows/doclinks.yml/badge.svg)](https://github.com/LSYS/rbStata/actions/workflows/doclinks.yml) |
+| Meta |  |
+
 ## Statement of Need
 
 Stata `.dta` data files are not forward compatible. 
