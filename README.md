@@ -14,7 +14,7 @@
 | --- | --- |
 | Package | [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/rbStata?label=Python%203.6%2B&logo=python&logoColor=white)](https://pypi.org/project/rbStata/) [![PyPI](https://img.shields.io/pypi/v/rbStata?color=blue&label=PyPI&logo=pypi&logoColor=white)](https://pypi.org/project/rbStata/) [![GitHub release (latest by date)](https://img.shields.io/github/v/release/lsys/rbStata?color=blue&label=Latest%20release)](https://github.com/LSYS/rbStata/releases) |
 | Testing/build | [![Coverage](https://codecov.io/github/lsys/rbStata/coverage.svg?branch=main)](https://codecov.io/gh/lsys/rbStata) [![CI](https://github.com/LSYS/rbStata/actions/workflows/build.yml/badge.svg)](https://github.com/LSYS/rbStata/actions/workflows/build.yml) [![CLI](https://github.com/LSYS/rbStata/actions/workflows/cli-pkg.yml/badge.svg)](https://github.com/LSYS/rbStata/actions/workflows/cli-pkg.yml) [![DocLinks](https://github.com/LSYS/rbStata/actions/workflows/doclinks.yml/badge.svg)](https://github.com/LSYS/rbStata/actions/workflows/doclinks.yml) |
-| Meta |  |
+| Meta | [![GitHub](https://img.shields.io/github/license/lsys/rbStata?color=purple&label=License)](https://choosealicense.com/licenses/mit/) |
 
 ## Statement of Need
 
