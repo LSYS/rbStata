@@ -55,18 +55,18 @@ Roll back to older versions of Stata `.dta` files with `rbStata`.
   ...
 
   The Stata version to convert to.
-> Target version [13]:
-
-  File suffix for saving the output file(s).
-  (For example, the suffix ''-old'' means that auto.dta will be converted and
-  saved as auto-old.dta. Default is to use ''-rbstata''.)
-  > File suffix for saving [-rbstata]:
-
-  Include all .dta files in current directory and its subdirectories.
-  (Default is to include only the .dta files in the current directory.)
-  > Include subdirectories (y/n) [n]:
-
-  > Print all messages (y/n) [y]:
+  > Target version [13]:
+  
+    File suffix for saving the output file(s).
+    (For example, the suffix ''-old'' means that auto.dta will be converted and
+    saved as auto-old.dta. Default is to use ''-rbstata''.)
+    > File suffix for saving [-rbstata]:
+  
+    Include all .dta files in current directory and its subdirectories.
+    (Default is to include only the .dta files in the current directory.)
+    > Include subdirectories (y/n) [n]:
+  
+    > Print all messages (y/n) [y]:
   ...
   ```
 <details><summary><em>Settings [defaults]</em></summary>
