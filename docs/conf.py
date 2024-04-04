@@ -18,7 +18,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'wbStata'
+project = 'rbStata'
 copyright = '2024, Lucas Shen'
 author = 'Lucas Shen'
 
