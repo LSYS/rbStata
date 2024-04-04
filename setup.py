@@ -14,7 +14,7 @@ install_requires = [
 
 setup(
     name="rbstata",
-    version="0.1.0",
+    version="0.1.1",
     description=(
         "A command-line utility that converts (or roll back) versions of Stata dta data files."
     ),
